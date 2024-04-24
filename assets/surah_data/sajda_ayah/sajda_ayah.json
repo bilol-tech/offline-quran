@@ -1,0 +1,349 @@
+[
+  {
+    "number": 1160,
+    "text": "إِنَّ ٱلَّذِینَ عِندَ رَبِّكَ لَا یَسۡتَكۡبِرُونَ عَنۡ عِبَادَتِهِۦ وَیُسَبِّحُونَهُۥ وَلَهُۥ یَسۡجُدُونَ ۩\n",
+    "surah": {
+      "number": 7,
+      "name": "سُورَةُ الأَعۡرَافِ",
+      "englishName": "Al-A'raaf",
+      "englishNameTranslation": "The Heights",
+      "revelationType": "Meccan",
+      "numberOfAyahs": 206
+    },
+    "numberInSurah": 206,
+    "juz": 9,
+    "manzil": 2,
+    "page": 176,
+    "ruku": 145,
+    "hizbQuarter": 70,
+    "sajda": {
+      "id": 1,
+      "recommended": true,
+      "obligatory": false
+    }
+  },
+  {
+    "number": 1722,
+    "text": "وَلِلَّهِ یَسۡجُدُ مَن فِی ٱلسَّمَـٰوَ ٰ⁠تِ وَٱلۡأَرۡضِ طَوۡعࣰا وَكَرۡهࣰا وَظِلَـٰلُهُم بِٱلۡغُدُوِّ وَٱلۡـَٔاصَالِ ۩\n",
+    "surah": {
+      "number": 13,
+      "name": "سُورَةُ الرَّعۡدِ",
+      "englishName": "Ar-Ra'd",
+      "englishNameTranslation": "The Thunder",
+      "revelationType": "Medinan",
+      "numberOfAyahs": 43
+    },
+    "numberInSurah": 15,
+    "juz": 13,
+    "manzil": 3,
+    "page": 251,
+    "ruku": 206,
+    "hizbQuarter": 100,
+    "sajda": {
+      "id": 2,
+      "recommended": true,
+      "obligatory": false
+    }
+  },
+  {
+    "number": 1951,
+    "text": "یَخَافُونَ رَبَّهُم مِّن فَوۡقِهِمۡ وَیَفۡعَلُونَ مَا یُؤۡمَرُونَ ۩\n",
+    "surah": {
+      "number": 16,
+      "name": "سُورَةُ النَّحۡلِ",
+      "englishName": "An-Nahl",
+      "englishNameTranslation": "The Bee",
+      "revelationType": "Meccan",
+      "numberOfAyahs": 128
+    },
+    "numberInSurah": 50,
+    "juz": 14,
+    "manzil": 3,
+    "page": 272,
+    "ruku": 229,
+    "hizbQuarter": 108,
+    "sajda": {
+      "id": 3,
+      "recommended": true,
+      "obligatory": false
+    }
+  },
+  {
+    "number": 2138,
+    "text": "وَیَخِرُّونَ لِلۡأَذۡقَانِ یَبۡكُونَ وَیَزِیدُهُمۡ خُشُوعࣰا ۩\n",
+    "surah": {
+      "number": 17,
+      "name": "سُورَةُ الإِسۡرَاءِ",
+      "englishName": "Al-Israa",
+      "englishNameTranslation": "The Night Journey",
+      "revelationType": "Meccan",
+      "numberOfAyahs": 111
+    },
+    "numberInSurah": 109,
+    "juz": 15,
+    "manzil": 4,
+    "page": 293,
+    "ruku": 251,
+    "hizbQuarter": 117,
+    "sajda": {
+      "id": 4,
+      "recommended": true,
+      "obligatory": false
+    }
+  },
+  {
+    "number": 2308,
+    "text": "أُو۟لَـٰۤىِٕكَ ٱلَّذِینَ أَنۡعَمَ ٱللَّهُ عَلَیۡهِم مِّنَ ٱلنَّبِیِّـۧنَ مِن ذُرِّیَّةِ ءَادَمَ وَمِمَّنۡ حَمَلۡنَا مَعَ نُوحࣲ وَمِن ذُرِّیَّةِ إِبۡرَ ٰ⁠هِیمَ وَإِسۡرَ ٰ⁠ۤءِیلَ وَمِمَّنۡ هَدَیۡنَا وَٱجۡتَبَیۡنَاۤۚ إِذَا تُتۡلَىٰ عَلَیۡهِمۡ ءَایَـٰتُ ٱلرَّحۡمَـٰنِ خَرُّوا۟ سُجَّدࣰا وَبُكِیࣰّا ۩\n",
+    "surah": {
+      "number": 19,
+      "name": "سُورَةُ مَرۡيَمَ",
+      "englishName": "Maryam",
+      "englishNameTranslation": "Mary",
+      "revelationType": "Meccan",
+      "numberOfAyahs": 98
+    },
+    "numberInSurah": 58,
+    "juz": 16,
+    "manzil": 4,
+    "page": 309,
+    "ruku": 267,
+    "hizbQuarter": 123,
+    "sajda": {
+      "id": 5,
+      "recommended": true,
+      "obligatory": false
+    }
+  },
+  {
+    "number": 2613,
+    "text": "أَلَمۡ تَرَ أَنَّ ٱللَّهَ یَسۡجُدُ لَهُۥ مَن فِی ٱلسَّمَـٰوَ ٰ⁠تِ وَمَن فِی ٱلۡأَرۡضِ وَٱلشَّمۡسُ وَٱلۡقَمَرُ وَٱلنُّجُومُ وَٱلۡجِبَالُ وَٱلشَّجَرُ وَٱلدَّوَاۤبُّ وَكَثِیرࣱ مِّنَ ٱلنَّاسِۖ وَكَثِیرٌ حَقَّ عَلَیۡهِ ٱلۡعَذَابُۗ وَمَن یُهِنِ ٱللَّهُ فَمَا لَهُۥ مِن مُّكۡرِمٍۚ إِنَّ ٱللَّهَ یَفۡعَلُ مَا یَشَاۤءُ ۩\n",
+    "surah": {
+      "number": 22,
+      "name": "سُورَةُ الحَجِّ",
+      "englishName": "Al-Hajj",
+      "englishNameTranslation": "The Pilgrimage",
+      "revelationType": "Medinan",
+      "numberOfAyahs": 78
+    },
+    "numberInSurah": 18,
+    "juz": 17,
+    "manzil": 4,
+    "page": 334,
+    "ruku": 286,
+    "hizbQuarter": 133,
+    "sajda": {
+      "id": 6,
+      "recommended": true,
+      "obligatory": false
+    }
+  },
+  {
+    "number": 2672,
+    "text": "یَـٰۤأَیُّهَا ٱلَّذِینَ ءَامَنُوا۟ ٱرۡكَعُوا۟ وَٱسۡجُدُوا۟ وَٱعۡبُدُوا۟ رَبَّكُمۡ وَٱفۡعَلُوا۟ ٱلۡخَیۡرَ لَعَلَّكُمۡ تُفۡلِحُونَ ۩\n",
+    "surah": {
+      "number": 22,
+      "name": "سُورَةُ الحَجِّ",
+      "englishName": "Al-Hajj",
+      "englishNameTranslation": "The Pilgrimage",
+      "revelationType": "Medinan",
+      "numberOfAyahs": 78
+    },
+    "numberInSurah": 77,
+    "juz": 17,
+    "manzil": 4,
+    "page": 341,
+    "ruku": 294,
+    "hizbQuarter": 136,
+    "sajda": {
+      "id": 7,
+      "recommended": true,
+      "obligatory": false
+    }
+  },
+  {
+    "number": 2915,
+    "text": "وَإِذَا قِیلَ لَهُمُ ٱسۡجُدُوا۟ لِلرَّحۡمَـٰنِ قَالُوا۟ وَمَا ٱلرَّحۡمَـٰنُ أَنَسۡجُدُ لِمَا تَأۡمُرُنَا وَزَادَهُمۡ نُفُورࣰا ۩\n",
+    "surah": {
+      "number": 25,
+      "name": "سُورَةُ الفُرۡقَانِ",
+      "englishName": "Al-Furqaan",
+      "englishNameTranslation": "The Criterion",
+      "revelationType": "Meccan",
+      "numberOfAyahs": 77
+    },
+    "numberInSurah": 60,
+    "juz": 19,
+    "manzil": 4,
+    "page": 365,
+    "ruku": 314,
+    "hizbQuarter": 146,
+    "sajda": {
+      "id": 8,
+      "recommended": true,
+      "obligatory": false
+    }
+  },
+  {
+    "number": 3185,
+    "text": "ٱللَّهُ لَاۤ إِلَـٰهَ إِلَّا هُوَ رَبُّ ٱلۡعَرۡشِ ٱلۡعَظِیمِ ۩\n",
+    "surah": {
+      "number": 27,
+      "name": "سُورَةُ النَّمۡلِ",
+      "englishName": "An-Naml",
+      "englishNameTranslation": "The Ant",
+      "revelationType": "Meccan",
+      "numberOfAyahs": 93
+    },
+    "numberInSurah": 26,
+    "juz": 19,
+    "manzil": 5,
+    "page": 379,
+    "ruku": 328,
+    "hizbQuarter": 151,
+    "sajda": {
+      "id": 9,
+      "recommended": true,
+      "obligatory": false
+    }
+  },
+  {
+    "number": 3518,
+    "text": "إِنَّمَا یُؤۡمِنُ بِـَٔایَـٰتِنَا ٱلَّذِینَ إِذَا ذُكِّرُوا۟ بِهَا خَرُّوا۟ سُجَّدࣰا وَسَبَّحُوا۟ بِحَمۡدِ رَبِّهِمۡ وَهُمۡ لَا یَسۡتَكۡبِرُونَ ۩\n",
+    "surah": {
+      "number": 32,
+      "name": "سُورَةُ السَّجۡدَةِ",
+      "englishName": "As-Sajda",
+      "englishNameTranslation": "The Prostration",
+      "revelationType": "Meccan",
+      "numberOfAyahs": 30
+    },
+    "numberInSurah": 15,
+    "juz": 21,
+    "manzil": 5,
+    "page": 416,
+    "ruku": 359,
+    "hizbQuarter": 166,
+    "sajda": {
+      "id": 10,
+      "recommended": false,
+      "obligatory": true
+    }
+  },
+  {
+    "number": 3994,
+    "text": "قَالَ لَقَدۡ ظَلَمَكَ بِسُؤَالِ نَعۡجَتِكَ إِلَىٰ نِعَاجِهِۦۖ وَإِنَّ كَثِیرࣰا مِّنَ ٱلۡخُلَطَاۤءِ لَیَبۡغِی بَعۡضُهُمۡ عَلَىٰ بَعۡضٍ إِلَّا ٱلَّذِینَ ءَامَنُوا۟ وَعَمِلُوا۟ ٱلصَّـٰلِحَـٰتِ وَقَلِیلࣱ مَّا هُمۡۗ وَظَنَّ دَاوُۥدُ أَنَّمَا فَتَنَّـٰهُ فَٱسۡتَغۡفَرَ رَبَّهُۥ وَخَرَّ رَاكِعࣰا وَأَنَابَ ۩\n",
+    "surah": {
+      "number": 38,
+      "name": "سُورَةُ صٓ",
+      "englishName": "Saad",
+      "englishNameTranslation": "The letter Saad",
+      "revelationType": "Meccan",
+      "numberOfAyahs": 88
+    },
+    "numberInSurah": 24,
+    "juz": 23,
+    "manzil": 6,
+    "page": 454,
+    "ruku": 392,
+    "hizbQuarter": 182,
+    "sajda": {
+      "id": 11,
+      "recommended": true,
+      "obligatory": false
+    }
+  },
+  {
+    "number": 4256,
+    "text": "فَإِنِ ٱسۡتَكۡبَرُوا۟ فَٱلَّذِینَ عِندَ رَبِّكَ یُسَبِّحُونَ لَهُۥ بِٱلَّیۡلِ وَٱلنَّهَارِ وَهُمۡ لَا یَسۡـَٔمُونَ ۩\n",
+    "surah": {
+      "number": 41,
+      "name": "سُورَةُ فُصِّلَتۡ",
+      "englishName": "Fussilat",
+      "englishNameTranslation": "Explained in detail",
+      "revelationType": "Meccan",
+      "numberOfAyahs": 54
+    },
+    "numberInSurah": 38,
+    "juz": 24,
+    "manzil": 6,
+    "page": 480,
+    "ruku": 417,
+    "hizbQuarter": 192,
+    "sajda": {
+      "id": 12,
+      "recommended": false,
+      "obligatory": true
+    }
+  },
+  {
+    "number": 4846,
+    "text": "فَٱسۡجُدُوا۟ لِلَّهِ وَٱعۡبُدُوا۟ ۩\n",
+    "surah": {
+      "number": 53,
+      "name": "سُورَةُ النَّجۡمِ",
+      "englishName": "An-Najm",
+      "englishNameTranslation": "The Star",
+      "revelationType": "Meccan",
+      "numberOfAyahs": 62
+    },
+    "numberInSurah": 62,
+    "juz": 27,
+    "manzil": 7,
+    "page": 528,
+    "ruku": 462,
+    "hizbQuarter": 211,
+    "sajda": {
+      "id": 13,
+      "recommended": false,
+      "obligatory": true
+    }
+  },
+  {
+    "number": 5905,
+    "text": "وَإِذَا قُرِئَ عَلَیۡهِمُ ٱلۡقُرۡءَانُ لَا یَسۡجُدُونَ ۩\n",
+    "surah": {
+      "number": 84,
+      "name": "سُورَةُ الانشِقَاقِ",
+      "englishName": "Al-Inshiqaaq",
+      "englishNameTranslation": "The Splitting Open",
+      "revelationType": "Meccan",
+      "numberOfAyahs": 25
+    },
+    "numberInSurah": 21,
+    "juz": 30,
+    "manzil": 7,
+    "page": 589,
+    "ruku": 526,
+    "hizbQuarter": 236,
+    "sajda": {
+      "id": 14,
+      "recommended": true,
+      "obligatory": false
+    }
+  },
+  {
+    "number": 6125,
+    "text": "كَلَّا لَا تُطِعۡهُ وَٱسۡجُدۡ وَٱقۡتَرِب ۩\n",
+    "surah": {
+      "number": 96,
+      "name": "سُورَةُ العَلَقِ",
+      "englishName": "Al-Alaq",
+      "englishNameTranslation": "The Clot",
+      "revelationType": "Meccan",
+      "numberOfAyahs": 19
+    },
+    "numberInSurah": 19,
+    "juz": 30,
+    "manzil": 7,
+    "page": 597,
+    "ruku": 538,
+    "hizbQuarter": 239,
+    "sajda": {
+      "id": 15,
+      "recommended": false,
+      "obligatory": true
+    }
+  }
+]
+
+

@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "125925737685",
+    "project_id": "offline-quran-75bce",
+    "storage_bucket": "offline-quran-75bce.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:125925737685:android:e8e0c8d7aea1dbd8138e5c",
+        "android_client_info": {
+          "package_name": "com.example.offline_quran_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "125925737685-rk67shkgapbasatc7lkl0n0em8iud2a6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.offline_quran_app",
+            "certificate_hash": "b69fb5d1b0d00d7aac2ec11f70a4852675540666"
+          }
+        },
+        {
+          "client_id": "125925737685-knje06k7br3iletr6gqfhmthkftdd0l5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAMH28cBjIuDCTg9K6j8CEbGTjbxuiItA8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "125925737685-fkr5sao682npl6er03nm2n60sb28nlfr.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "125925737685-6ne9t8iji12jgp1d194lgnjp7b6fjv1a.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.offlineQuranApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
