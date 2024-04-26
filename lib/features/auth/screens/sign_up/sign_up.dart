@@ -261,19 +261,10 @@ class _SignUpState extends State<SignUp> {
                               );
                               showToast(message: 'Successfully Signed up');
                               if (userCredential.additionalUserInfo!.isNewUser) {
-                                Navigator.of(context).push(
-                                  PageRouteBuilder(
-                                    pageBuilder: (_, __, ___) => const MainScreen(selectedIndex: 0),
-                                    transitionsBuilder: (_, animation, __, child) {
-                                      return SlideTransition(
-                                        position: Tween<Offset>(
-                                          begin: const Offset(1.0, 0.0),
-                                          end: Offset.zero,
-                                        ).animate(animation),
-                                        child: child,
-                                      );
-                                    },
-                                  ),
+                                Navigator.of(context).pushAndRemoveUntil(
+                                  MaterialPageRoute(
+                                    builder: (context) => const MainScreen(selectedIndex: 0,),
+                                  ), (route) => true,
                                 );
                               } else {
                                 showToast(message: 'Already have an account');
@@ -305,20 +296,10 @@ class _SignUpState extends State<SignUp> {
                         ),
                         InkWell(
                           onTap: () {
-                            Navigator.of(context).push(
-                              PageRouteBuilder(
-                                pageBuilder: (_, __, ___) => const SignIn(),
-                                transitionsBuilder: (_, animation, __, child) {
-                                  return SlideTransition(
-                                    position: Tween<Offset>(
-                                      begin: const Offset(1.0, 0.0),
-                                      // Start from right side
-                                      end: Offset.zero, // Move to the center
-                                    ).animate(animation),
-                                    child: child,
-                                  );
-                                },
-                              ),
+                            Navigator.of(context).pushAndRemoveUntil(
+                              MaterialPageRoute(
+                                builder: (context) => const SignIn(),
+                              ), (route) => true,
                             );
                           },
                           child: Row(

@@ -59,6 +59,10 @@ dependencies:
   lottie: ^2.3.0
   geolocator: ^11.0.0
   geocoding: ^3.0.0
+  webview_flutter: ^2.0.13
+  simple_connection_checker: ^0.2.1
+  connectivity_plus: ^5.0.2
+  flutter_bloc: ^8.1.5
 
 dev_dependencies:
   flutter_test:
@@ -97,6 +101,7 @@ flutter:
     - assets/surah_data/juz_details/juz_ayah_arabic/
     - assets/surah_data/juz_details/juz_ayah_translated/
     - assets/surah_data/sajda_ayah/
+    - pubspec.yaml
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

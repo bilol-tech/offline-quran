@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../../constant/color.dart';
 import '../../main_screen.dart';
 import '../../../models/sajda_ayah_home_screen_model.dart';
+import '../../tafsir/surah/surah_details.dart';
 
 class SajdaHomeScreen extends StatefulWidget {
   const SajdaHomeScreen({super.key});
@@ -90,27 +91,27 @@ class _SajdaHomeScreenState extends State<SajdaHomeScreen> {
                     SajdaAyahs sajdaAyah = sajdaAyahs[index];
                     return GestureDetector(
                       onTap: () {
-                        // Navigator.of(context).push(
-                        //   PageRouteBuilder(
-                        //     pageBuilder: (_, __, ___) => SurahDetails(
-                        //       ayah['surah']['number'],
-                        //       ayah['surah']['englishName'],
-                        //       ayah['surah']['englishName'],
-                        //       ayah['surah']['revelationType'],
-                        //       ayah['sajda']['id'],
-                        //       specificAyah: ayah["numberInSurah"]  - 1,
-                        //     ),
-                        //     transitionsBuilder: (_, animation, __, child) {
-                        //       return SlideTransition(
-                        //         position: Tween<Offset>(
-                        //           begin: const Offset(1.0, 0.0), // Start from right side
-                        //           end: Offset.zero, // Move to the center
-                        //         ).animate(animation),
-                        //         child: child,
-                        //       );
-                        //     },
-                        //   ),
-                        // );
+                        Navigator.of(context).push(
+                          PageRouteBuilder(
+                            pageBuilder: (_, __, ___) => SurahDetails(
+                              sajdaAyah.surah.number,
+                              sajdaAyah.surah.englishName,
+                              sajdaAyah.surah.englishName,
+                              sajdaAyah.surah.revelationType,
+                              sajdaAyah.surah.numberOfAyahs,
+                              specificAyah: sajdaAyah.numberInSurah - 1,
+                            ),
+                            transitionsBuilder: (_, animation, __, child) {
+                              return SlideTransition(
+                                position: Tween<Offset>(
+                                  begin: const Offset(1.0, 0.0), // Start from right side
+                                  end: Offset.zero, // Move to the center
+                                ).animate(animation),
+                                child: child,
+                              );
+                            },
+                          ),
+                        );
                       },
                       child: Row(
                         children: [

@@ -1,17 +1,25 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:lottie/lottie.dart';
+import 'package:offline_quran_app/global/no_internet_page.dart';
 import 'package:provider/provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:simple_connection_checker/simple_connection_checker.dart';
 
 import '../../../../constant/color.dart';
+import '../../../../global/check_connect_internet.dart';
+import '../../../../global/common/show_custom_popup_menu.dart';
+import '../../cubit/internet_cubit.dart';
+import '../../cubit/internet_state.dart';
 import '../../provider/color_provider.dart';
 import '../../provider/text_size_provider.dart';
 
@@ -24,14 +32,14 @@ class AudioSurahDetails extends StatefulWidget {
   final int specificAyah;
 
   const AudioSurahDetails(
-      this.surahNumber,
-      this.surahName,
-      this.surahNameTranslated,
-      this.revelationType,
-      this.numberOfAyahs, {
-        super.key,
-        this.specificAyah = 0,
-      });
+    this.surahNumber,
+    this.surahName,
+    this.surahNameTranslated,
+    this.revelationType,
+    this.numberOfAyahs, {
+    super.key,
+    this.specificAyah = 0,
+  });
 
   @override
   _AudioSurahDetailsState createState() => _AudioSurahDetailsState();
@@ -48,12 +56,13 @@ class _AudioSurahDetailsState extends State<AudioSurahDetails> {
   int currentMusic = 0;
   bool isOpened = false;
   Duration maxDuration = const Duration(seconds: 0);
-  int playingIndex = -1; // Store the index of the currently playing track
-  final ItemScrollController itemScrollController =
-  ItemScrollController(); // Add ItemScrollController
+  int playingIndex = -1;
+  final ItemScrollController itemScrollController = ItemScrollController();
   int selectedStartNumber = 0;
   int selectedEndNumber = 0;
   late Color? selectedColor;
+
+  late InternetCubit internetCubit;
 
   @override
   void initState() {
@@ -62,6 +71,9 @@ class _AudioSurahDetailsState extends State<AudioSurahDetails> {
     fetchSurahDetailsTranslated();
     fetchAyahAudio();
     fetchData();
+    internetCubit = context.read<InternetCubit>();
+    internetCubit.checkConnectivity();
+    internetCubit.trackConnectivityChange();
     audioPlayer.onPlayerComplete.listen((event) {
       if (audioPlayer.releaseMode != ReleaseMode.loop) {
         playNextMusic();
@@ -69,26 +81,22 @@ class _AudioSurahDetailsState extends State<AudioSurahDetails> {
         audioPlayer.play(UrlSource(ayahs[currentMusic]['audio']));
         getMaxDuration();
         setState(() {
-          playingIndex =
-              currentMusic; // Update the playing index when the track starts playing
+          playingIndex = currentMusic;
         });
       }
     });
     audioPlayer.onPlayerStateChanged.listen((PlayerState state) {
       setState(() {
         if (state == PlayerState.playing) {
-          playingIndex =
-              currentMusic; // Update the playing index when a track starts playing
+          playingIndex = currentMusic;
         } else {
-          playingIndex = -1; // Reset playing index when no track is playing
+          playingIndex = -1;
         }
       });
     });
 
     audioPlayer.stop();
   }
-
-
 
   void playAudio(String audioUrl, int index) async {
     await audioPlayer.stop();
@@ -107,7 +115,7 @@ class _AudioSurahDetailsState extends State<AudioSurahDetails> {
             index: currentMusic,
             duration: const Duration(milliseconds: 300),
             curve: Curves.easeInOut,
-            alignment: 0, // Scroll to the start of the viewport
+            alignment: 0,
           );
         }
       });
@@ -133,6 +141,7 @@ class _AudioSurahDetailsState extends State<AudioSurahDetails> {
   @override
   void dispose() {
     audioPlayer.dispose();
+    internetCubit.dispose();
     super.dispose();
   }
 
@@ -146,14 +155,18 @@ class _AudioSurahDetailsState extends State<AudioSurahDetails> {
   Future<void> fetchData() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String surahDetailsKey = 'surah_${widget.surahNumber}_details';
-    final String surahDetailsTranslatedKey = 'surah_${widget.surahNumber}_details_translated';
+    final String surahDetailsTranslatedKey =
+        'surah_${widget.surahNumber}_details_translated';
     final String ayahAudioKey = 'surah_${widget.surahNumber}_ayah_audio';
 
     String? surahDetailsJson = prefs.getString(surahDetailsKey);
-    String? surahDetailsTranslatedJson = prefs.getString(surahDetailsTranslatedKey);
+    String? surahDetailsTranslatedJson =
+        prefs.getString(surahDetailsTranslatedKey);
     String? ayahAudioJson = prefs.getString(ayahAudioKey);
 
-    if (surahDetailsJson != null && surahDetailsTranslatedJson != null && ayahAudioJson != null) {
+    if (surahDetailsJson != null &&
+        surahDetailsTranslatedJson != null &&
+        ayahAudioJson != null) {
       setState(() {
         surahDetails = json.decode(surahDetailsJson);
         surahDetailsTranslated = json.decode(surahDetailsTranslatedJson);
@@ -170,7 +183,8 @@ class _AudioSurahDetailsState extends State<AudioSurahDetails> {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String surahDetailsKey = 'surah_${widget.surahNumber}_details';
 
-    final response = await http.get(Uri.parse('https://api.alquran.cloud/v1/surah/${widget.surahNumber}'));
+    final response = await http.get(
+        Uri.parse('https://api.alquran.cloud/v1/surah/${widget.surahNumber}'));
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = json.decode(response.body);
@@ -190,7 +204,8 @@ class _AudioSurahDetailsState extends State<AudioSurahDetails> {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String ayahAudioKey = 'surah_${widget.surahNumber}_ayah_audio';
 
-    final response = await http.get(Uri.parse('https://api.alquran.cloud/v1/surah/${widget.surahNumber}/ar.alafasy'));
+    final response = await http.get(Uri.parse(
+        'https://api.alquran.cloud/v1/surah/${widget.surahNumber}/ar.alafasy'));
 
     if (response.statusCode == 200) {
       final decodedData = json.decode(response.body);
@@ -206,9 +221,11 @@ class _AudioSurahDetailsState extends State<AudioSurahDetails> {
 
   Future<void> fetchSurahDetailsTranslated() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String surahDetailsTranslatedKey = 'surah_${widget.surahNumber}_details_translated';
+    final String surahDetailsTranslatedKey =
+        'surah_${widget.surahNumber}_details_translated';
 
-    final response = await http.get(Uri.parse('https://api.alquran.cloud/v1/surah/${widget.surahNumber}/en.asad'));
+    final response = await http.get(Uri.parse(
+        'https://api.alquran.cloud/v1/surah/${widget.surahNumber}/en.asad'));
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = json.decode(response.body);
@@ -216,7 +233,8 @@ class _AudioSurahDetailsState extends State<AudioSurahDetails> {
         setState(() {
           surahDetailsTranslated = data['data'];
         });
-        await prefs.setString(surahDetailsTranslatedKey, json.encode(surahDetailsTranslated));
+        await prefs.setString(
+            surahDetailsTranslatedKey, json.encode(surahDetailsTranslated));
       }
     } else {
       // Handle error
@@ -233,7 +251,10 @@ class _AudioSurahDetailsState extends State<AudioSurahDetails> {
           color: selectedColor,
           border: Border(
             top: BorderSide(
-              color: selectedColor == mode_3 ? text : Colors.grey.withOpacity(0.4), // Choose your border color here
+              color: selectedColor == mode_3
+                  ? text
+                  : Colors.grey
+                      .withOpacity(0.4), // Choose your border color here
               width: 1.0, // Choose the width of the border
             ),
           ),
@@ -255,7 +276,10 @@ class _AudioSurahDetailsState extends State<AudioSurahDetails> {
                       audioPlayer.seek(duration);
                       setState(() {});
                     },
-                    timeLabelTextStyle: TextStyle(color: selectedColor == mode_3 ? Colors.white : Colors.black),
+                    timeLabelTextStyle: TextStyle(
+                        color: selectedColor == mode_3
+                            ? Colors.white
+                            : Colors.black),
                     timeLabelPadding: 8,
                     barHeight: 3,
                     thumbRadius: 4,
@@ -282,7 +306,9 @@ class _AudioSurahDetailsState extends State<AudioSurahDetails> {
                       size: 20,
                       color: audioPlayer.releaseMode == ReleaseMode.loop
                           ? primary
-                          : selectedColor == mode_3 ? Colors.white : Colors.black,
+                          : selectedColor == mode_3
+                              ? Colors.white
+                              : Colors.black,
                     ),
                   ),
                   IconButton(
@@ -297,8 +323,8 @@ class _AudioSurahDetailsState extends State<AudioSurahDetails> {
                               child: Column(
                                 children: [
                                   const Padding(
-                                    padding: EdgeInsets.only(
-                                        left: 12.0, top: 12),
+                                    padding:
+                                        EdgeInsets.only(left: 12.0, top: 12),
                                     child: Row(
                                       children: [
                                         Icon(
@@ -328,11 +354,11 @@ class _AudioSurahDetailsState extends State<AudioSurahDetails> {
                                         left: 12.0, top: 12),
                                     child: Row(
                                       mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
+                                          MainAxisAlignment.spaceAround,
                                       children: [
                                         Column(
                                           crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                              CrossAxisAlignment.start,
                                           children: [
                                             const Text(
                                               "Start",
@@ -344,21 +370,21 @@ class _AudioSurahDetailsState extends State<AudioSurahDetails> {
                                             ),
                                             Container(
                                               width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
+                                                      .size
+                                                      .width *
                                                   0.38,
                                               height: 36,
                                               decoration: BoxDecoration(
                                                 borderRadius:
-                                                const BorderRadius.all(
-                                                    Radius.circular(6)),
+                                                    const BorderRadius.all(
+                                                        Radius.circular(6)),
                                                 color: modalSheetColor,
                                               ),
                                               child: StatefulBuilder(
                                                 builder: (BuildContext context,
                                                     void Function(
-                                                        void Function())
-                                                    setState) {
+                                                            void Function())
+                                                        setState) {
                                                   return DropdownButton<int>(
                                                     value: selectedStartNumber,
                                                     onChanged: (int? newValue) {
@@ -375,7 +401,7 @@ class _AudioSurahDetailsState extends State<AudioSurahDetails> {
                                                     },
                                                     underline: Container(),
                                                     alignment:
-                                                    Alignment.centerLeft,
+                                                        Alignment.centerLeft,
                                                     dropdownColor: background,
                                                     icon: const Padding(
                                                       padding: EdgeInsets.only(
@@ -386,27 +412,27 @@ class _AudioSurahDetailsState extends State<AudioSurahDetails> {
                                                     ),
                                                     items: List.generate(
                                                       numberOfAyahs,
-                                                          (index) =>
+                                                      (index) =>
                                                           DropdownMenuItem<int>(
-                                                            value: index,
-                                                            child: Padding(
-                                                              padding:
+                                                        value: index,
+                                                        child: Padding(
+                                                          padding:
                                                               const EdgeInsets
-                                                                  .only(
+                                                                      .only(
                                                                   left: 10.0),
-                                                              child: Text(
-                                                                  '${index + 1}',
-                                                                  style: const TextStyle(
-                                                                      color: Colors
-                                                                          .white,
-                                                                      fontSize:
+                                                          child: Text(
+                                                              '${index + 1}',
+                                                              style: const TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontSize:
                                                                       14)),
-                                                            ),
-                                                          ),
+                                                        ),
+                                                      ),
                                                     ),
                                                     borderRadius:
-                                                    BorderRadius.circular(
-                                                        8),
+                                                        BorderRadius.circular(
+                                                            8),
                                                   );
                                                 },
                                               ),
@@ -415,7 +441,7 @@ class _AudioSurahDetailsState extends State<AudioSurahDetails> {
                                         ),
                                         Column(
                                           crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                              CrossAxisAlignment.start,
                                           children: [
                                             const Text(
                                               "End",
@@ -427,21 +453,21 @@ class _AudioSurahDetailsState extends State<AudioSurahDetails> {
                                             ),
                                             Container(
                                               width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
+                                                      .size
+                                                      .width *
                                                   0.38,
                                               height: 36,
                                               decoration: BoxDecoration(
                                                 borderRadius:
-                                                const BorderRadius.all(
-                                                    Radius.circular(6)),
+                                                    const BorderRadius.all(
+                                                        Radius.circular(6)),
                                                 color: modalSheetColor,
                                               ),
                                               child: StatefulBuilder(
                                                 builder: (BuildContext context,
                                                     void Function(
-                                                        void Function())
-                                                    setState) {
+                                                            void Function())
+                                                        setState) {
                                                   return DropdownButton<int>(
                                                     value: selectedEndNumber,
                                                     onChanged: (int? newValue) {
@@ -457,7 +483,7 @@ class _AudioSurahDetailsState extends State<AudioSurahDetails> {
                                                     },
                                                     underline: Container(),
                                                     alignment:
-                                                    Alignment.centerLeft,
+                                                        Alignment.centerLeft,
                                                     dropdownColor: background,
                                                     icon: const Padding(
                                                       padding: EdgeInsets.only(
@@ -469,29 +495,29 @@ class _AudioSurahDetailsState extends State<AudioSurahDetails> {
                                                     items: List.generate(
                                                       numberOfAyahs -
                                                           selectedStartNumber,
-                                                          (index) =>
+                                                      (index) =>
                                                           DropdownMenuItem<int>(
-                                                            value:
+                                                        value:
                                                             selectedStartNumber +
                                                                 index,
-                                                            child: Padding(
-                                                              padding:
+                                                        child: Padding(
+                                                          padding:
                                                               const EdgeInsets
-                                                                  .only(
+                                                                      .only(
                                                                   left: 10.0),
-                                                              child: Text(
-                                                                  '${selectedStartNumber + (index + 1)}',
-                                                                  style: const TextStyle(
-                                                                      color: Colors
-                                                                          .white,
-                                                                      fontSize:
+                                                          child: Text(
+                                                              '${selectedStartNumber + (index + 1)}',
+                                                              style: const TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontSize:
                                                                       14)),
-                                                            ),
-                                                          ),
+                                                        ),
+                                                      ),
                                                     ),
                                                     borderRadius:
-                                                    BorderRadius.circular(
-                                                        8),
+                                                        BorderRadius.circular(
+                                                            8),
                                                   );
                                                 },
                                               ),
@@ -508,7 +534,7 @@ class _AudioSurahDetailsState extends State<AudioSurahDetails> {
                                     padding: const EdgeInsets.only(right: 21.0),
                                     child: Row(
                                       crossAxisAlignment:
-                                      CrossAxisAlignment.end,
+                                          CrossAxisAlignment.end,
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
                                         InkWell(
@@ -528,11 +554,11 @@ class _AudioSurahDetailsState extends State<AudioSurahDetails> {
                                             ),
                                             child: Center(
                                                 child: Text(
-                                                  "cancel".toUpperCase(),
-                                                  style: const TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 12),
-                                                )),
+                                              "cancel".toUpperCase(),
+                                              style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 12),
+                                            )),
                                           ),
                                         ),
                                         InkWell(
@@ -543,13 +569,13 @@ class _AudioSurahDetailsState extends State<AudioSurahDetails> {
                                                   milliseconds: 300),
                                               curve: Curves.easeInOut,
                                               alignment:
-                                              0, // Scroll to the start of the viewport
+                                                  0, // Scroll to the start of the viewport
                                             );
                                             setState(() {
                                               if (selectedStartNumber != 0) {
                                                 playAudio(
                                                     ayahs[selectedStartNumber]
-                                                    ['audio'],
+                                                        ['audio'],
                                                     selectedStartNumber);
                                               }
                                               selectedStartNumber = 0;
@@ -566,11 +592,11 @@ class _AudioSurahDetailsState extends State<AudioSurahDetails> {
                                                 color: Colors.green),
                                             child: Center(
                                                 child: Text(
-                                                  "save".toUpperCase(),
-                                                  style: const TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 12),
-                                                )),
+                                              "save".toUpperCase(),
+                                              style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 12),
+                                            )),
                                           ),
                                         ),
                                       ],
@@ -585,7 +611,9 @@ class _AudioSurahDetailsState extends State<AudioSurahDetails> {
                       icon: Icon(
                         Icons.settings,
                         size: 20,
-                        color: selectedColor == mode_3 ? Colors.white : Colors.black,
+                        color: selectedColor == mode_3
+                            ? Colors.white
+                            : Colors.black,
                       )),
                   IconButton(
                     onPressed: () {
@@ -598,7 +626,8 @@ class _AudioSurahDetailsState extends State<AudioSurahDetails> {
                     icon: Icon(
                       Icons.skip_previous,
                       size: 20,
-                      color: selectedColor == mode_3 ? Colors.white : Colors.black,
+                      color:
+                          selectedColor == mode_3 ? Colors.white : Colors.black,
                     ),
                   ),
                   IconButton(
@@ -626,7 +655,9 @@ class _AudioSurahDetailsState extends State<AudioSurahDetails> {
                           return Icon(
                             Icons.play_arrow,
                             size: 20,
-                            color: selectedColor == mode_3 ? Colors.white : Colors.black,
+                            color: selectedColor == mode_3
+                                ? Colors.white
+                                : Colors.black,
                           );
                         }
                       },
@@ -644,7 +675,8 @@ class _AudioSurahDetailsState extends State<AudioSurahDetails> {
                     icon: Icon(
                       Icons.skip_next,
                       size: 20,
-                      color: selectedColor == mode_3 ? Colors.white : Colors.black,
+                      color:
+                          selectedColor == mode_3 ? Colors.white : Colors.black,
                     ),
                   ),
                   IconButton(
@@ -657,7 +689,8 @@ class _AudioSurahDetailsState extends State<AudioSurahDetails> {
                     icon: Icon(
                       Icons.close_rounded,
                       size: 20,
-                      color: selectedColor == mode_3 ? Colors.white : Colors.black,
+                      color:
+                          selectedColor == mode_3 ? Colors.white : Colors.black,
                     ),
                   ),
                 ],
@@ -674,221 +707,239 @@ class _AudioSurahDetailsState extends State<AudioSurahDetails> {
     selectedColor = Provider.of<ColorModel>(context).selectedColor;
     final latinTextSizeProvider = Provider.of<LatinTextSizeProvider>(context);
     final arabicTextSizeProvider = Provider.of<ArabicTextSizeProvider>(context);
-    return Scaffold(
-      backgroundColor: selectedColor,
-      appBar: AppBar(
-        backgroundColor: selectedColor,
-        automaticallyImplyLeading: false,
-        elevation: 10,
-        title: Row(children: [
-          IconButton(
-              onPressed: (() => Navigator.of(context).pop()),
-              icon: SvgPicture.asset(
-                'assets/svgs/back-icon.svg',
-                color: selectedColor == mode_3
-                    ? white.withOpacity(0.8)
-                    : Colors.black54,
-              )),
-          const SizedBox(
-            width: 24,
+    return BlocBuilder<InternetCubit, InternetStatus>(
+      builder: (context, state) {
+        return Scaffold(
+          backgroundColor: selectedColor,
+          appBar: AppBar(
+            backgroundColor: selectedColor,
+            automaticallyImplyLeading: false,
+            elevation: 10,
+            title: Row(children: [
+              IconButton(
+                  onPressed: (() => Navigator.of(context).pop()),
+                  icon: SvgPicture.asset(
+                    'assets/svgs/back-icon.svg',
+                    color: selectedColor == mode_3
+                        ? white.withOpacity(0.8)
+                        : Colors.black54,
+                  )),
+              const SizedBox(
+                width: 24,
+              ),
+              Text(
+                widget.surahName,
+                style: GoogleFonts.poppins(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: selectedColor == mode_3
+                      ? white.withOpacity(0.8)
+                      : Colors.black54,
+                ),
+              ),
+            ]),
+            actions: const [
+              CustomPopupMenu(
+                pageName: 'AudioDetails',
+              )
+            ],
           ),
-          Text(
-            widget.surahName,
-            style: GoogleFonts.poppins(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: selectedColor == mode_3
-                  ? white.withOpacity(0.8)
-                  : Colors.black54,
-            ),
-          ),
-        ]),
-        // actions: [
-        //   const CustomPopupMenu(
-        //     pageName: 'AudioDetails',
-        //   )
-        // ],
-      ),
-      body: surahDetails == null || ayahs == null
-          ? Center(
-          child: Lottie.asset("assets/animation/loading.json", width: 120))
-          : Stack(
-        children: [
-          Padding(
-            padding:
-            const EdgeInsets.only(left: 24, right: 24, bottom: 15),
-            child: ScrollablePositionedList.separated(
-              itemScrollController: itemScrollController,
-              itemBuilder: (context, index) {
-                if (surahDetails == null ||
-                    surahDetails!['ayahs'] == null ||
-                    index >= surahDetails!['ayahs'].length) {
-                  return const SizedBox.shrink();
-                }
-                final ayah = surahDetails?['ayahs'][index];
-                final ayahTranslated =
-                surahDetailsTranslated?['ayahs'][index];
-                final ayahAudio = ayahs[index];
-                return Padding(
-                  padding: const EdgeInsets.only(top: 10, bottom: 14),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                          "${ayah['text']}",
-                          style: GoogleFonts.amiri(
-                            height: 3,
-                            letterSpacing: 0.2,
-                            fontWeight: FontWeight.bold,
-                            color: selectedColor == mode_3
-                                ? white
-                                : Colors.black,
-                            fontSize: arabicTextSizeProvider
-                                .currentArabicTextSize,
-                          ),
-                          // textDirection: TextDirection.rtl,
-                          textAlign: TextAlign.right,
-                        ),
-                      ),
-                      // Text(
-                      //   "${ayahTranslated?['numberInSurah'].toString()}. ${ayahTranslated?['text']}",
-                      //   style: GoogleFonts.poppins(
-                      //       color: text, fontSize: 16),
-                      // ),
-                      Row(
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                isOpened = true;
-                              });
-                              playAudio(ayahAudio['audio'], index);
-                            },
-                            child: Container(
-                              width: 90,
-                              decoration: BoxDecoration(
-                                color: index == playingIndex
-                                    ? primary
-                                    : selectedColor,
-                                borderRadius: const BorderRadius.all(
-                                    Radius.circular(20)),
-                                border: Border.all(
-                                  color: index == playingIndex
-                                      ? primary
-                                      : selectedColor == mode_3
-                                      ? white
-                                      : Colors.black54,
-                                ),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 5.0),
-                                child: Row(
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.start,
+          body: state.status == ConnectivityStatus.disconnected
+              ? const NoInternetPage()
+              : surahDetails == null || ayahs == null
+                  ? Center(
+                      child: Lottie.asset("assets/animation/loading.json",
+                          width: 120))
+                  : Stack(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: 24, right: 24, bottom: 15),
+                          child: ScrollablePositionedList.separated(
+                            itemScrollController: itemScrollController,
+                            itemBuilder: (context, index) {
+                              if (surahDetails == null ||
+                                  surahDetails!['ayahs'] == null ||
+                                  index >= surahDetails!['ayahs'].length) {
+                                return const SizedBox.shrink();
+                              }
+                              final ayah = surahDetails?['ayahs'][index];
+                              final ayahTranslated =
+                                  surahDetailsTranslated?['ayahs'][index];
+                              final ayahAudio = ayahs[index];
+                              return Padding(
+                                padding:
+                                    const EdgeInsets.only(top: 10, bottom: 14),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    const SizedBox(
-                                      width: 8,
-                                    ),
-                                    Icon(
-                                      index == playingIndex
-                                          ? Icons.pause
-                                          : Icons.play_arrow,
-                                      color: index == playingIndex
-                                          ? white
-                                          : selectedColor == mode_3
-                                          ? white
-                                          : Colors.black54,
-                                      size: 18,
-                                    ),
-                                    const SizedBox(
-                                      width: 6,
-                                    ),
-                                    Text(
-                                      "Listen",
-                                      style: TextStyle(
-                                        color: index == playingIndex
-                                            ? white
-                                            : selectedColor == mode_3
-                                            ? white
-                                            : Colors.black54,
+                                    Align(
+                                      alignment: Alignment.centerRight,
+                                      child: Text(
+                                        "${ayah['text']}",
+                                        style: GoogleFonts.amiri(
+                                          height: 3,
+                                          letterSpacing: 0.2,
+                                          fontWeight: FontWeight.bold,
+                                          color: selectedColor == mode_3
+                                              ? white
+                                              : Colors.black,
+                                          fontSize: arabicTextSizeProvider
+                                              .currentArabicTextSize,
+                                        ),
+                                        // textDirection: TextDirection.rtl,
+                                        textAlign: TextAlign.right,
                                       ),
+                                    ),
+                                    // Text(
+                                    //   "${ayahTranslated?['numberInSurah'].toString()}. ${ayahTranslated?['text']}",
+                                    //   style: GoogleFonts.poppins(
+                                    //       color: text, fontSize: 16),
+                                    // ),
+                                    Row(
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              isOpened = true;
+                                            });
+                                            playAudio(
+                                                ayahAudio['audio'], index);
+                                          },
+                                          child: Container(
+                                            width: 90,
+                                            decoration: BoxDecoration(
+                                              color: index == playingIndex
+                                                  ? primary
+                                                  : selectedColor,
+                                              borderRadius:
+                                                  const BorderRadius.all(
+                                                      Radius.circular(20)),
+                                              border: Border.all(
+                                                color: index == playingIndex
+                                                    ? primary
+                                                    : selectedColor == mode_3
+                                                        ? white
+                                                        : Colors.black54,
+                                              ),
+                                            ),
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 5.0),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                children: [
+                                                  const SizedBox(
+                                                    width: 8,
+                                                  ),
+                                                  Icon(
+                                                    index == playingIndex
+                                                        ? Icons.pause
+                                                        : Icons.play_arrow,
+                                                    color: index == playingIndex
+                                                        ? white
+                                                        : selectedColor ==
+                                                                mode_3
+                                                            ? white
+                                                            : Colors.black54,
+                                                    size: 18,
+                                                  ),
+                                                  const SizedBox(
+                                                    width: 6,
+                                                  ),
+                                                  Text(
+                                                    "Listen",
+                                                    style: TextStyle(
+                                                      color: index ==
+                                                              playingIndex
+                                                          ? white
+                                                          : selectedColor ==
+                                                                  mode_3
+                                                              ? white
+                                                              : Colors.black54,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          // Icon(
+                                          //   Icons.audiotrack,
+                                          //   color: index == playingIndex
+                                          //       ? Colors.green
+                                          //       : Colors.red,
+                                          // ),
+                                        ),
+                                        const Spacer(),
+                                        Container(
+                                          decoration: BoxDecoration(
+                                              border: Border.all(
+                                                color: selectedColor == mode_3
+                                                    ? white
+                                                    : Colors.black54,
+                                              ),
+                                              borderRadius:
+                                                  const BorderRadius.all(
+                                                      Radius.circular(3))),
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 4, vertical: 1),
+                                            child: Text(
+                                              "${ayah['numberInSurah']}:${surahDetails!['numberOfAyahs']}",
+                                              style: TextStyle(
+                                                color: selectedColor == mode_3
+                                                    ? white
+                                                    : Colors.black,
+                                                fontSize: latinTextSizeProvider
+                                                        .currentLatinTextSize /
+                                                    1.5,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),
-                              ),
-                            ),
-                            // Icon(
-                            //   Icons.audiotrack,
-                            //   color: index == playingIndex
-                            //       ? Colors.green
-                            //       : Colors.red,
-                            // ),
+                              );
+                            },
+                            itemCount: ayahs.length,
+                            separatorBuilder: (context, index) => Divider(
+                                color:
+                                    const Color(0xFF7B80AD).withOpacity(.35)),
                           ),
-                          const Spacer(),
-                          Container(
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: selectedColor == mode_3
-                                      ? white
-                                      : Colors.black54,
-                                ),
-                                borderRadius: const BorderRadius.all(
-                                    Radius.circular(3))),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 4, vertical: 1),
-                              child: Text(
-                                "${ayah['numberInSurah']}:${surahDetails!['numberOfAyahs']}",
-                                style: TextStyle(
-                                  color: selectedColor == mode_3
-                                      ? white
-                                      : Colors.black,
-                                  fontSize: latinTextSizeProvider
-                                      .currentLatinTextSize /
-                                      1.5,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
+                        ),
+                      ],
+                    ),
+          floatingActionButton: state.status == ConnectivityStatus.disconnected
+              ? const SizedBox()
+              : Transform.scale(
+                  scale: 0.8,
+                  child: FloatingActionButton(
+                    onPressed: () {
+                      itemScrollController.scrollTo(
+                        index: 0,
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
+                        alignment: 0, // Scroll to the start of the viewport
+                      );
+                    },
+                    backgroundColor: primary,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(50.0),
+                    ),
+                    child: Center(
+                        child: Icon(
+                      Icons.swipe_up,
+                      color: white,
+                    )),
                   ),
-                );
-              },
-              itemCount: ayahs.length,
-              separatorBuilder: (context, index) => Divider(
-                  color: const Color(0xFF7B80AD).withOpacity(.35)),
-            ),
-          ),
-        ],
-      ),
-      floatingActionButton: Transform.scale(
-        scale: 0.8,
-        child: FloatingActionButton(
-          onPressed: () {
-            itemScrollController.scrollTo(
-              index: 0,
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeInOut,
-              alignment: 0, // Scroll to the start of the viewport
-            );
-          },
-          backgroundColor: primary,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(50.0),
-          ),
-          child: Center(
-              child: Icon(
-                Icons.swipe_up,
-                color: white,
-              )),
-        ),
-      ),
-      bottomNavigationBar: _buildBottomSheet(),
+                ),
+          bottomNavigationBar: _buildBottomSheet(),
+        );
+      },
     );
   }
 }

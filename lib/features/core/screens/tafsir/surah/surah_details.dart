@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 import '../../../../../../constant/color.dart';
+import '../../../../../global/common/show_custom_popup_menu.dart';
 import '../../../models/surah_ayah_model.dart';
 import '../../../models/surah_ayah_translated_model.dart';
 import '../../../provider/color_provider.dart';
@@ -124,11 +125,11 @@ class _SurahDetailsState extends State<SurahDetails> {
                     : Colors.black),
           ),
         ]),
-        // actions: const [
-        //   CustomPopupMenu(
-        //     pageName: 'SurahDetails',
-        //   )
-        // ],
+        actions: const [
+          CustomPopupMenu(
+            pageName: 'SurahDetails',
+          )
+        ],
       ),
       body: ayahs.isEmpty || ayahsTranslated.isEmpty
           ? Center(
@@ -273,7 +274,7 @@ class _SurahDetailsState extends State<SurahDetails> {
               index: savedAyahProvider.lastSavedAyahIndex,
               duration: const Duration(milliseconds: 300),
               curve: Curves.easeInOut,
-              alignment: 0, // Scroll to the start of the viewport
+              alignment: 0,
             );
           },
           backgroundColor: primary,

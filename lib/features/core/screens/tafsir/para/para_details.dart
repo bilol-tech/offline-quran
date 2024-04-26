@@ -9,10 +9,12 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../../../constant/color.dart';
+import '../../../../../global/common/show_custom_popup_menu.dart';
 import '../../../models/para_details_ayah.dart';
 import '../../../models/para_details_surah.dart';
 import '../../../models/para_detila_translated_ayah.dart';
 import '../../../provider/color_provider.dart';
+import '../../../provider/saved_ayah_provider.dart';
 import '../../../provider/text_size_provider.dart';
 
 class ParaDetailsScreen extends StatefulWidget {
@@ -96,11 +98,11 @@ class _ParaDetailsScreenState extends State<ParaDetailsScreen> {
             ),
           ),
         ]),
-        // actions: const [
-        //   CustomPopupMenu(
-        //     pageName: 'SurahDetails',
-        //   ),
-        // ],
+        actions: const [
+          CustomPopupMenu(
+            pageName: 'SurahDetails',
+          ),
+        ],
       ),
       body: paraDetailsAyahs.isEmpty || paraDetailsTranslatedAyahs.isEmpty
           ? Center(
@@ -159,19 +161,41 @@ class _ParaDetailsScreenState extends State<ParaDetailsScreen> {
                       fontSize:
                       latinTextSizeProvider.currentLatinTextSize),
                 ),
-                const SizedBox(
-                  height: 5,
-                ),
-                Row(
-                  children: [
-                    const Spacer(),
-                    SvgPicture.asset(
-                      "assets/svgs/bookmark-icon.svg",
-                      width: latinTextSizeProvider.currentLatinTextSize / 0.8,
-                      height: latinTextSizeProvider.currentLatinTextSize / 0.8,
-                    ),
-                  ],
-                ),
+                // const SizedBox(
+                //   height: 5,
+                // ),
+                // Row(
+                //   children: [
+                //     const Spacer(),
+                //     InkWell(
+                //       onTap: (){
+                //         ParaDetailsAyah paraAyah = paraDetailsAyahs[index];
+                //         ParaDetailsTranslatedAyah ayahTranslated = paraDetailsTranslatedAyahs[index];
+                //
+                //         final ayahNumberInSurah = paraAyah.numberInSurah;
+                //         final ayahText = paraAyah.text;
+                //         final ayahTranslatedText = ayahTranslated.text;
+                //         final surahName = widget.surahName;
+                //         final surahNumber = widget.numberInSurah;
+                //         Provider.of<SavedAyahProvider>(context,
+                //             listen: false)
+                //             .saveAyah(
+                //             surahNumber,
+                //             index,
+                //             ayahNumberInSurah
+                //                 .toString(),
+                //             ayahText,
+                //             ayahTranslatedText,
+                //             surahName);
+                //       },
+                //       child: SvgPicture.asset(
+                //         "assets/svgs/bookmark-icon.svg",
+                //         width: latinTextSizeProvider.currentLatinTextSize / 0.8,
+                //         height: latinTextSizeProvider.currentLatinTextSize / 0.8,
+                //       ),
+                //     ),
+                //   ],
+                // ),
                 const SizedBox(
                   height: 5,
                 ),

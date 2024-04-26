@@ -187,21 +187,10 @@ class _SignInState extends State<SignIn> {
                             InkWell(
                               onTap: (){
                                 if(loginController.text.isNotEmpty){
-                                  Navigator.of(context).push(
-                                    PageRouteBuilder(
-                                      pageBuilder: (_, __, ___) => ForgotPassword(email: loginController.text,),
-                                      transitionsBuilder:
-                                          (_, animation, __, child) {
-                                        return SlideTransition(
-                                          position: Tween<Offset>(
-                                            begin: const Offset(1.0, 0.0),
-                                            end: Offset
-                                                .zero,
-                                          ).animate(animation),
-                                          child: child,
-                                        );
-                                      },
-                                    ),
+                                  Navigator.of(context).pushAndRemoveUntil(
+                                    MaterialPageRoute(
+                                      builder: (context) => ForgotPassword(email: loginController.text,),
+                                    ), (route) => true,
                                   );
                                 } else {
                                   showToast(message: "Email/Password is required");
@@ -231,22 +220,10 @@ class _SignInState extends State<SignIn> {
                                   .then(
                                     (value) {
                                   showToast(message: 'Successfully Signed in');
-                                  Navigator.of(context).push(
-                                    PageRouteBuilder(
-                                      pageBuilder: (_, __, ___) =>
-                                      const MainScreen(selectedIndex: 0),
-                                      transitionsBuilder:
-                                          (_, animation, __, child) {
-                                        return SlideTransition(
-                                          position: Tween<Offset>(
-                                            begin: const Offset(1.0, 0.0),
-                                            end: Offset
-                                                .zero,
-                                          ).animate(animation),
-                                          child: child,
-                                        );
-                                      },
-                                    ),
+                                  Navigator.of(context).pushAndRemoveUntil(
+                                    MaterialPageRoute(
+                                      builder: (context) => const MainScreen(selectedIndex: 0,),
+                                    ), (route) => true,
                                   );
                                 },
                               ).catchError((error) {
@@ -285,20 +262,10 @@ class _SignInState extends State<SignIn> {
                         ),
                         InkWell(
                           onTap: () {
-                            Navigator.of(context).push(
-                              PageRouteBuilder(
-                                pageBuilder: (_, __, ___) => const SignUp(),
-                                transitionsBuilder: (_, animation, __, child) {
-                                  return SlideTransition(
-                                    position: Tween<Offset>(
-                                      begin: const Offset(1.0, 0.0),
-                                      // Start from right side
-                                      end: Offset.zero, // Move to the center
-                                    ).animate(animation),
-                                    child: child,
-                                  );
-                                },
-                              ),
+                            Navigator.of(context).pushAndRemoveUntil(
+                              MaterialPageRoute(
+                                builder: (context) => const SignUp(),
+                              ), (route) => true,
                             );
                           },
                           child: Row(
@@ -404,19 +371,10 @@ class _SignInState extends State<SignIn> {
         print("User signed in successfully");
         // Check if context is available before navigation
         if (context != null) {
-          Navigator.of(context).push(
-            PageRouteBuilder(
-              pageBuilder: (_, __, ___) => const MainScreen(selectedIndex: 0),
-              transitionsBuilder: (_, animation, __, child) {
-                return SlideTransition(
-                  position: Tween<Offset>(
-                    begin: const Offset(1.0, 0.0),
-                    end: Offset.zero,
-                  ).animate(animation),
-                  child: child,
-                );
-              },
-            ),
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(
+              builder: (context) => const MainScreen(selectedIndex: 0,),
+            ), (route) => true,
           );
         } else {
           print("Context is null. Navigation failed.");

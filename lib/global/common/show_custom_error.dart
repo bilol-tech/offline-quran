@@ -49,19 +49,11 @@ class ErrorScreen extends StatelessWidget {
             const SizedBox(height: 100,),
             InkWell(
               onTap: (){
-                Navigator.of(context).push(
-                  PageRouteBuilder(
-                    pageBuilder: (_, __, ___) => const MainScreen(selectedIndex: 0),
-                    transitionsBuilder: (_, animation, __, child) {
-                      return SlideTransition(
-                        position: Tween<Offset>(
-                          begin: const Offset(1.0, 0.0), // Start from right side
-                          end: Offset.zero, // Move to the center
-                        ).animate(animation),
-                        child: child,
-                      );
-                    },
+                Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(
+                    builder: (context) => const MainScreen(selectedIndex: 0),
                   ),
+                      (route) => false,
                 );
               },
               child: Padding(

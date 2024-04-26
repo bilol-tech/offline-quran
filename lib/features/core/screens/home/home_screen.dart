@@ -1,5 +1,9 @@
+import 'dart:convert';
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:offline_quran_app/features/core/screens/home/widgets/para_home_screen.dart';
@@ -7,6 +11,8 @@ import 'package:offline_quran_app/features/core/screens/home/widgets/sajda_home_
 import 'package:offline_quran_app/features/core/screens/home/widgets/surah_home_screen.dart';
 
 import '../../../../constant/color.dart';
+import '../../models/surah_ayah_model.dart';
+import '../../models/surah_home_page_model.dart';
 import '../search/search_bar.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -17,6 +23,35 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
+  late List<SurahAyah> ayahs = [];
+  SurahAyah? randomAyah;
+
+  @override
+  void initState() {
+    super.initState();
+    ayahArabicData().then((_) {
+      setState(() {
+        randomAyah = getRandomAyah();
+      });
+    });
+  }
+
+  Future<void> ayahArabicData() async {
+    final random = Random();
+    final int randomNumber = random.nextInt(114) + 1;
+    String data = await rootBundle.loadString('assets/surah_data/surah_details/ayah_arabic/surah_$randomNumber.json');
+    List<dynamic> jsonData = json.decode(data);
+    setState(() {
+      ayahs = jsonData.map((data) => SurahAyah.fromJson(data)).toList();
+    });
+  }
+
+  SurahAyah getRandomAyah() {
+    final random = Random();
+    return ayahs[random.nextInt(ayahs.length)];
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,8 +93,41 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Column(
               children: [
                 const SizedBox(height: 17,),
-                _lastRead(),
-                const SizedBox(height: 17,),
+                Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      color: gray
+                      ),
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 5,),
+                      Text("Random Ayah", style: GoogleFonts.poppins(fontSize: 16, color: white, fontWeight: FontWeight.w700),),
+                      const SizedBox(height: 15,),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                        child: randomAyah != null
+                            ? Text(
+                          randomAyah!.text,
+                          style: GoogleFonts.amiri(
+                            color: white,
+                            fontSize: 16,
+                            height: 2.3,
+                            letterSpacing: 0.2,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.center,
+                        )
+                            : const SizedBox(),
+                      ),
+                    ],
+                  )
+                ),
+                // Positioned(
+                //     bottom: 0,
+                //     right: 0,
+                //     child: SvgPicture.asset('assets/svgs/quran.svg')),
+                const SizedBox(height: 15,),
                 const SurahHomeScreen(),
                 const SizedBox(height: 15,),
                 const ParaHomeScreen(),
@@ -73,73 +141,4 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-}
-
-Stack _lastRead() {
-  return Stack(
-    children: [
-      Container(
-        height: 131,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            gradient: const LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                stops: [
-                  0,
-                  .6,
-                  1
-                ],
-                colors: [
-                  Color(0xFFDF98FA),
-                  Color(0xFFB070FD),
-                  Color(0xFF9055FF)
-                ])),
-      ),
-      Positioned(
-          bottom: 0,
-          right: 0,
-          child: SvgPicture.asset('assets/svgs/quran.svg')),
-      Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                SvgPicture.asset('assets/svgs/book.svg'),
-                const SizedBox(
-                  width: 8,
-                ),
-                Text(
-                  'Last Read',
-                  style: GoogleFonts.poppins(
-                      color: Colors.white, fontWeight: FontWeight.w500),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Text(
-              'Al-Fatihah',
-              style: GoogleFonts.poppins(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 18),
-            ),
-            const SizedBox(
-              height: 4,
-            ),
-            Text(
-              'Ayat No: 1',
-              style: GoogleFonts.poppins(
-                color: Colors.white,
-              ),
-            ),
-          ],
-        ),
-      )
-    ],
-  );
 }

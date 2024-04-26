@@ -9,6 +9,7 @@ import 'package:lottie/lottie.dart';
 import '../../../../../constant/color.dart';
 import '../../../models/surah_home_page_model.dart';
 import '../../main_screen.dart';
+import '../../tafsir/surah/surah_details.dart';
 
 class SurahHomeScreen extends StatefulWidget {
   const SurahHomeScreen({super.key});
@@ -93,25 +94,26 @@ class _SurahHomeScreenState extends State<SurahHomeScreen> {
                     SurahHomePageModel surah = surahs[index];
                     return GestureDetector(
                       onTap: () {
-                        // Navigator.of(context).push(
-                        //   PageRouteBuilder(
-                        //     pageBuilder: (_, __, ___) => SurahDetails(
-                        //       surah['number'],
-                        //       surah['englishName'],
-                        //       surah['englishNameTranslation'],
-                        //       surah['revelationType'],
-                        //       surah['numberOfAyahs'], specificAyah: 0,),
-                        //     transitionsBuilder: (_, animation, __, child) {
-                        //       return SlideTransition(
-                        //         position: Tween<Offset>(
-                        //           begin: const Offset(1.0, 0.0), // Start from right side
-                        //           end: Offset.zero, // Move to the center
-                        //         ).animate(animation),
-                        //         child: child,
-                        //       );
-                        //     },
-                        //   ),
-                        // );
+                        Navigator.of(context).push(
+                          PageRouteBuilder(
+                            pageBuilder: (_, __, ___) => SurahDetails(
+                              surah.number,
+                              surah.englishName,
+                              surah.englishNameTranslation,
+                              surah.revelationType,
+                              surah.numberOfAyahs, specificAyah: 0,
+                            ),
+                            transitionsBuilder: (_, animation, __, child) {
+                              return SlideTransition(
+                                position: Tween<Offset>(
+                                  begin: const Offset(1.0, 0.0), // Start from right side
+                                  end: Offset.zero, // Move to the center
+                                ).animate(animation),
+                                child: child,
+                              );
+                            },
+                          ),
+                        );
                       },
                       child: Row(
                         children: [
