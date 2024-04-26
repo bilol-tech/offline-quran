@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:offline_quran_app/features/core/screens/audio/audio_surah.dart';
+import 'package:offline_quran_app/features/core/screens/prayers/prayers.dart';
 import 'package:offline_quran_app/features/core/screens/profile/profile.dart';
 import 'package:offline_quran_app/features/core/screens/tafsir/tafsir.dart';
 
@@ -36,7 +37,7 @@ class _MainScreenState extends State<MainScreen> {
         return Tafsir(selectedIndex: widget.selectedIndex);
       case 2:
         // return const Prayers();
-        return const HomeScreen();
+        return const Prayers();
       case 3:
         // return const AudioSurah();
         return const AudioSurah();

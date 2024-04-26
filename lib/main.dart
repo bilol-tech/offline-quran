@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:offline_quran_app/features/core/cubit/internet_cubit.dart';
 import 'package:offline_quran_app/features/core/screens/main_screen.dart';
 import 'package:offline_quran_app/features/core/screens/profile/profile.dart';
+import 'package:offline_quran_app/global/no_internet_page.dart';
 import 'package:provider/provider.dart';
 
 import 'features/core/provider/color_provider.dart';
@@ -58,7 +59,7 @@ class MyApp extends StatelessWidget {
       themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
       home: const MainScreen(selectedIndex: 0,)),
-      // home: SurahAyahDropdown(),
+      // home: NoInternetPage(),)
     );
   }
 }
