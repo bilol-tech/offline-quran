@@ -32,7 +32,6 @@ bool isDarkModeEnabled = false;
 class _ProfileScreenState extends State<ProfileScreen> {
   var auth = FirebaseAuth.instance;
 
-  final ConnectivityService _connectivityService = ConnectivityService();
   bool _isConnected = false;
 
   late InternetCubit internetCubit;
@@ -70,23 +69,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    final themeData = Theme.of(context);
+    final light = themeData.brightness == Brightness.light;
+    print(themeData.brightness == Brightness.light ? 'Light Mode' : 'Dark Mode');
+
     return BlocBuilder<InternetCubit, InternetStatus>(
       builder: (context, state) {
         return Scaffold(
-          backgroundColor: background,
+          backgroundColor: light ? lightBackgroundYellow : background,
           appBar: AppBar(
-            backgroundColor: gray,
+            backgroundColor: light ? lightBackgroundWhite : gray,
             automaticallyImplyLeading: false,
             elevation: 0,
             centerTitle: false,
             title: Padding(
-              padding: const EdgeInsets.only(left: 10.0),
+              padding: EdgeInsets.only(left: screenHeight * 0.010),
               child: Text(
                 'My Page',
                 style: GoogleFonts.poppins(
-                    fontSize: 22,
+                    fontSize: screenWidth * 0.055,
                     fontWeight: FontWeight.bold,
-                    color: white.withOpacity(0.8)),
+                    color: light ? black : white.withOpacity(0.8)),
               ),
             ),
           ),
@@ -94,45 +100,45 @@ class _ProfileScreenState extends State<ProfileScreen> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  const SizedBox(
-                    height: 20,
+                  SizedBox(
+                    height: screenWidth * 0.030,
                   ),
                   user != null
                       ? GestureDetector(
                     onTap: () {
                       showModalBottomSheet(
                         context: context,
-                        backgroundColor: gray,
+                        backgroundColor: light ? white : gray,
                         builder: (BuildContext context) {
                           return Container(
-                            height: MediaQuery.of(context).size.height * 0.22,
-                            color: gray,
+                            height: screenHeight * 0.25,
+                            color: light ? white : gray,
                             child: Column(
                               children: [
                                 Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 12.0, top: 12),
+                                  padding: EdgeInsets.only(
+                                      left: screenHeight * 0.012, top: screenHeight * 0.012),
                                   child: Row(
                                     children: [
-                                      const Icon(
+                                      Icon(
                                         Icons.person,
-                                        size: 20,
-                                        color: Colors.white,
+                                        size: screenWidth * 0.040,
+                                        color: light ? black : white,
                                       ),
-                                      const SizedBox(
-                                        width: 8,
+                                      SizedBox(
+                                        width: screenWidth * 0.016,
                                       ),
                                       Text(
                                         "${user?.email}",
-                                        style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 14),
+                                        style: TextStyle(
+                                            color: light ? black : white,
+                                            fontSize: screenWidth * 0.028),
                                       ),
                                     ],
                                   ),
                                 ),
-                                const SizedBox(
-                                  height: 4,
+                                SizedBox(
+                                  height: screenHeight * 0.004,
                                 ),
                                 Divider(
                                   color: Colors.grey.withOpacity(0.6),
@@ -161,13 +167,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 CustomProfileListTile(
                                   title: 'Delete Profile',
                                   leadingIcon: Icons.delete,
+                                  iconColor: light ? black : white,
+                                  titleColor: light ? black : white,
                                   onTap: () {
                                     showDialog(
                                       context: context,
                                       builder: (BuildContext context) {
                                         return AlertDialog.adaptive(
-                                          content: const Text(
-                                            'Are you sure to delete account?',
+                                          content: Text(
+                                            'Are you sure to delete account?', style: TextStyle(fontSize: screenWidth * 0.033),
                                           ),
                                           // backgroundColor: gray,
                                           actions: <Widget>[
@@ -177,7 +185,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               },
                                               child: Text(
                                                 'Cancel',
-                                                style: TextStyle(color: text),
+                                                style: TextStyle(color: text, fontSize:  screenWidth * 0.035),
                                               ),
                                             ),
                                             TextButton(
@@ -212,7 +220,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               },
                                               child: Text('Confirm',
                                                   style: TextStyle(
-                                                      color: primary)),
+                                                      color: primary, fontSize: screenWidth * 0.035)),
                                             ),
                                           ],
                                         );
@@ -222,16 +230,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ),
                                 CustomProfileListTile(
                                   title: 'LogOut',
-                                  titleColor: Colors.red,
+                                  titleColor: light ? Colors.red : Colors.red,
                                   leadingIcon: Icons.logout,
-                                  iconColor: Colors.red,
+                                  iconColor: light ? Colors.red : Colors.red,
                                   onTap: () {
                                     showDialog(
                                       context: context,
                                       builder: (BuildContext context) {
                                         return AlertDialog.adaptive(
-                                          content: const Text(
-                                            'Are you sure to signOut from account?',
+                                          content: Text(
+                                            'Are you sure to signOut from account?', style: TextStyle(fontSize: screenWidth * 0.033),
                                           ),
                                           // backgroundColor: gray,
                                           actions: <Widget>[
@@ -241,7 +249,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               },
                                               child: Text(
                                                 'Cancel',
-                                                style: TextStyle(color: text),
+                                                style: TextStyle(color: text, fontSize: screenWidth * 0.035),
                                               ),
                                             ),
                                             TextButton(
@@ -274,7 +282,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               },
                                               child: Text('Confirm',
                                                   style: TextStyle(
-                                                      color: primary)),
+                                                      color: primary, fontSize: screenWidth * 0.035)),
                                             ),
                                           ],
                                         );
@@ -289,17 +297,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       );
                     },
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                      padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.045),
                       child: Container(
                         width: double.infinity,
                         decoration: BoxDecoration(
                             borderRadius:
                             const BorderRadius.all(Radius.circular(3)),
-                            border: Border.all(color: text.withOpacity(0.4)),
-                            color: gray),
+                            border: Border.all(color: text.withOpacity(0.12)),
+                            color: light ? white : gray),
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 10.0, horizontal: 10),
+                          padding: EdgeInsets.symmetric(
+                              vertical: screenWidth * 0.020, horizontal: screenWidth * 0.020),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -307,20 +315,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               user?.photoURL != null
                                   ? Center(
                                 child: Padding(
-                                  padding: const EdgeInsets.only(
-                                      bottom: 10.0),
+                                  padding: EdgeInsets.only(
+                                      bottom: screenWidth * 0.020),
                                   child: ClipOval(
                                     child: state.status == ConnectivityStatus.connected
                                         ? Image.network(
                                       "${user?.photoURL}",
-                                      width: 60,
-                                      height: 60,
+                                      width: screenWidth * 0.120,
+                                      height: screenWidth * 0.120,
                                       fit: BoxFit.cover,
                                     )
                                         : Image.asset(
                                       "assets/images/user.png",
-                                      width: 60,
-                                      height: 60,
+                                      width: screenWidth * 0.120,
+                                      height: screenWidth * 0.120,
                                     ),
                                   ),
                                 ),
@@ -329,22 +337,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               user?.phoneNumber != null
                                   ? Text(
                                 "${user?.phoneNumber}",
-                                style: TextStyle(color: white),
+                                style: TextStyle(color: light ? black : white, fontSize: screenWidth * 0.030),
                               )
                                   : const SizedBox(),
                               user?.displayName != null
                                   ? Text(
                                 "${user?.displayName}",
-                                style: TextStyle(color: white),
+                                style: TextStyle(color: light ? black : white, fontSize: screenWidth * 0.034),
                               )
                                   : const SizedBox(),
                               Text(
                                 "${user?.email}",
-                                style: TextStyle(color: white),
+                                style: TextStyle(color: light ? black : white, fontSize: screenWidth * 0.030),
                               ),
                               Text(
                                 formatCreationTime(user?.metadata),
-                                style: TextStyle(color: white, fontSize: 10),
+                                style: TextStyle(color: light ? black : white, fontSize: screenWidth * 0.022),
                               ),
                             ],
                           ),
@@ -371,23 +379,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       );
                     },
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                      padding: EdgeInsets.symmetric(horizontal: screenHeight * 0.030),
                       child: Container(
-                        height: 45,
+                        height: screenHeight * 0.050,
                         decoration: BoxDecoration(
                             borderRadius:
                             const BorderRadius.all(Radius.circular(3)),
                             color: primary),
                         child: Center(
                             child: Text(
-                              "Sign in or register to access.",
-                              style: TextStyle(color: white),
+                              "Sign in or register to access",
+                              style: TextStyle(color: white, fontSize: screenHeight * 0.015),
                             )),
                       ),
                     ),
                   ),
-                  const SizedBox(
-                    height: 8,
+                  SizedBox(
+                    height: screenHeight * 0.008,
                   ),
                   CustomProfileListTile(
                     title: 'Settings',

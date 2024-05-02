@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_popup/flutter_popup.dart';
 import 'package:http/http.dart' as http;
+import 'package:offline_quran_app/global/common/go_surah_ayah.dart';
 import 'package:provider/provider.dart';
 
 import '../../constant/color.dart';
@@ -66,16 +67,25 @@ class _CustomPopupMenuState extends State<CustomPopupMenu> {
     Color? selectedColor = Provider.of<ColorModel>(context).selectedColor;
     final latinTextSizeProvider = Provider.of<LatinTextSizeProvider>(context);
     final arabicTextSizeProvider = Provider.of<ArabicTextSizeProvider>(context);
+
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    final themeData = Theme.of(context);
+    final light = themeData.brightness == Brightness.light;
+    print(
+        themeData.brightness == Brightness.light ? 'Light Mode' : 'Dark Mode');
+
     return Padding(
-      padding: const EdgeInsets.only(right: 15),
+      padding: EdgeInsets.only(right: screenHeight * 0.015),
       child: CustomPopup(
         barrierColor: Colors.transparent,
-        contentRadius: 5,
+        contentRadius: screenHeight * 0.005,
         showArrow: false,
         backgroundColor: selectedColor,
         arrowColor: Colors.red,
         content: SizedBox(
-          width: 170,
+          width: screenWidth * 0.320,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -95,370 +105,69 @@ class _CustomPopupMenuState extends State<CustomPopupMenu> {
                   children: [
                     Icon(
                       Icons.search,
-                      size: 18,
+                      size: screenWidth * 0.036,
                       color: selectedColor == mode_3 ? white : Colors.black54,
                     ),
-                    const SizedBox(
-                      width: 10,
+                    SizedBox(
+                      width: screenHeight * 0.010,
                     ),
                     Text(
                       "Search",
                       style: TextStyle(
                           color: selectedColor == mode_3 ? white : Colors.black,
-                          fontSize: 13),
+                          fontSize: screenWidth * 0.026),
                     )
                   ],
                 ),
               ),
-              widget.pageName == "AudioDetails" ? const SizedBox() : const SizedBox(
-                height: 18,
-              ),
-              widget.pageName == "AudioDetails" ? const SizedBox() : InkWell(
-                onTap: () {
-                  if (mounted) {
-                    Navigator.pop(context); // Close the current screen
-                    showModalBottomSheet(
-                      context: context,
-                      backgroundColor: gray,
-                      builder: (BuildContext context) {
-                        return Container(
-                          height: MediaQuery.of(context).size.height * 0.26,
-                          color: gray,
-                          child: Column(
-                            children: [
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 12.0, top: 12),
-                                child: Row(
-                                  children: [
-                                    Icon(Icons.swipe_vertical_rounded,
-                                        size: 20, color: white),
-                                    const SizedBox(
-                                      width: 8,
-                                    ),
-                                    Text(
-                                      "Go Surah & Ayah",
-                                      style: TextStyle(color: white),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 4,
-                              ),
-                              Divider(
-                                color: Colors.grey.withOpacity(0.6),
-                                thickness: 0.3,
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 12.0, top: 12),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "Surah",
-                                          style: TextStyle(color: white),
-                                        ),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        Container(
-                                          // width: MediaQuery.of(context)
-                                          //         .size
-                                          //         .width *
-                                          //     0.38,
-                                          height: 36,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                const BorderRadius.all(
-                                                    Radius.circular(6)),
-                                            color: modalSheetColor,
-                                          ),
-                                          child: StatefulBuilder(
-                                            builder: (BuildContext context,
-                                                void Function(void Function())
-                                                    setState) {
-                                              return Padding(
-                                                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                                                child: DropdownButton<
-                                                    SurahHomePageModel>(
-                                                  hint: selectedSurah == null
-                                                      ? Text(
-                                                          'Select Surah',
-                                                          style: TextStyle(
-                                                              fontSize: 12,
-                                                              color: white),
-                                                        )
-                                                      : Text(
-                                                          'Ayah ${selectedSurah!.number}.${selectedSurah!.englishName}',
-                                                          style: TextStyle(
-                                                              fontSize: 12,
-                                                              color: white)),
-                                                  value: selectedSurah,
-                                                  onChanged: (newValue) {
-                                                    setState(() {
-                                                      selectedSurah = newValue;
-                                                      ayahArabicData(newValue!.number);
-                                                      selectedAyah = null;
-                                                    });
-                                                  },
-                                                  underline: Container(),
-                                                  alignment: Alignment.centerLeft,
-                                                  borderRadius:
-                                                      BorderRadius.circular(8),
-                                                  dropdownColor: background,
-                                                  icon: Icon(
-                                                      Icons.arrow_drop_down,
-                                                      color: white),
-                                                  items: surahs.map<
-                                                          DropdownMenuItem<
-                                                              SurahHomePageModel>>(
-                                                      (SurahHomePageModel surah) {
-                                                    return DropdownMenuItem<
-                                                        SurahHomePageModel>(
-                                                      value: surah,
-                                                      child: Text(
-                                                          "${surah.number}. ${surah.englishName}",
-                                                          style: TextStyle(
-                                                              color: white,
-                                                              fontSize: 12)),
-                                                    );
-                                                  }).toList(),
-                                                ),
-                                              );
-                                            },
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "Ayah",
-                                          style: TextStyle(color: white),
-                                        ),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        Container(
-                                          height: 36,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                const BorderRadius.all(
-                                                    Radius.circular(6)),
-                                            color: modalSheetColor,
-                                          ),
-                                          child: StatefulBuilder(
-                                            builder: (BuildContext context,
-                                                void Function(void Function())
-                                                    setState) {
-                                              return Padding(
-                                                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                                                child: DropdownButton<SurahAyah>(
-                                                  hint: selectedAyah == null
-                                                      ? Text(
-                                                    'Select Ayah',
-                                                    style: TextStyle(
-                                                        fontSize: 12,
-                                                        color: white),
-                                                  )
-                                                      : Text(
-                                                      'Ayah ${selectedAyah!.numberInSurah}',
-                                                      style: TextStyle(
-                                                          fontSize: 12,
-                                                          color: white)),
-                                                  value: selectedAyah,
-                                                  onChanged: (newValue) {
-                                                    setState(() {
-                                                      selectedAyah = newValue;
-                                                    });
-                                                  },
-                                                  underline: Container(),
-                                                  alignment: Alignment.centerLeft,
-                                                  borderRadius:
-                                                      BorderRadius.circular(8),
-                                                  dropdownColor: background,
-                                                  icon: Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            left: 10.0),
-                                                    child: Icon(
-                                                        Icons.arrow_drop_down,
-                                                        color: white),
-                                                  ),
-                                                  items: ayahs.map<
-                                                          DropdownMenuItem<
-                                                              SurahAyah>>(
-                                                      (SurahAyah ayah) {
-                                                    return DropdownMenuItem<
-                                                        SurahAyah>(
-                                                      value: ayah,
-                                                      child: Text(
-                                                        'Ayah ${ayah.numberInSurah}'
-                                                            .toString(),
-                                                        style: TextStyle(
-                                                            color: white,
-                                                            fontSize: 12),
-                                                      ),
-                                                    );
-                                                  }).toList(),
-                                                ),
-                                              );
-                                            },
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 15,
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(right: 21.0),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    InkWell(
-                                      onTap: () {
-                                        setState(() {
-                                          selectedSurah = null;
-                                          // selectedAyah = null;
-                                        });
-                                        Navigator.pop(context);
-                                      },
-                                      child: Container(
-                                        width: 90,
-                                        height: 28,
-                                        decoration: const BoxDecoration(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(6)),
-                                        ),
-                                        child: Center(
-                                            child: Text(
-                                          "cancel".toUpperCase(),
-                                          style: TextStyle(
-                                              color: white, fontSize: 12),
-                                        )),
-                                      ),
-                                    ),
-                                    InkWell(
-                                      onTap: () {
-                                        if (selectedSurah != null &&
-                                            selectedAyah != null) {
-                                          final surahNumber = selectedSurah?.number;
-                                          final surahName = selectedSurah?.name;
-                                          final englishName = selectedSurah?.englishName;
-                                          final revelationType = selectedSurah?.revelationType;
-                                          final numberOfAyahs = selectedSurah?.numberOfAyahs;
-                                          print('Selected Surah Number: $surahNumber');
-                                          print('Selected Surah Name: $surahName');
-                                          print('Selected Surah EnglishNumber: $englishName');
-                                          print('Selected Surah revelationType: $revelationType');
-                                          print('Selected Surah numberOfAyahs: $numberOfAyahs');
-
-                                          final ayahNumberInSurah = selectedSurah?.number;
-                                          print(ayahNumberInSurah);
-                                          // final ayahName = selectedSurah?.name;
-                                          // final englishName = selectedSurah?.englishName;
-                                          // final revelationType = selectedSurah?.revelationType;
-                                          // final numberOfAyahs = selectedSurah?.numberOfAyahs;
-
-                                          if(widget.pageName == "SurahDetails"){
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (_) => SurahDetails(
-                                                  selectedSurah!.number,
-                                                  selectedSurah!.englishName,
-                                                  selectedSurah!.englishName,
-                                                  selectedSurah!.revelationType,
-                                                  selectedSurah!.numberOfAyahs,
-                                                  specificAyah: selectedAyah!.numberInSurah - 1,
-                                                ),
-                                              ),
-                                            ).then((_) {
-                                              // Close the popup menu after navigating back
-                                              if (mounted) {
-                                                Navigator.pop(context);
-                                              }
-                                            });
-                                          } else if(widget.pageName == "AudioDetails"){
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (_) => AudioSurahDetails(
-                                                  selectedSurah!.number,
-                                                  selectedSurah!.englishName,
-                                                  selectedSurah!.englishName,
-                                                  selectedSurah!.revelationType,
-                                                  selectedSurah!.numberOfAyahs,
-                                                  specificAyah: selectedAyah!.numberInSurah - 1,
-                                                ),
-                                              ),
-                                            ).then((_) {
-                                              if (mounted) {
-                                                Navigator.pop(context);
-                                              }
-                                            });
-                                          }
-                                        }
-                                      },
-                                      child: Container(
-                                        width: 90,
-                                        height: 28,
-                                        decoration: const BoxDecoration(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(6)),
-                                            color: Colors.green),
-                                        child: Center(
-                                            child: Text(
-                                          "save".toUpperCase(),
-                                          style: TextStyle(
-                                              color: white, fontSize: 12),
-                                        )),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                        );
-                      },
-                    );
-                  }
-                },
-                child: Row(
-                  children: [
-                    Icon(Icons.swipe_vertical_rounded,
-                        size: 18,
-                        color:
-                            selectedColor == mode_3 ? white : Colors.black54),
-                    const SizedBox(
-                      width: 10,
+              widget.pageName == "AudioDetails"
+                  ? const SizedBox()
+                  : SizedBox(
+                      height: screenHeight * 0.018,
                     ),
-                    Text(
-                      "Go ayah",
-                      style: TextStyle(
-                          color: selectedColor == mode_3 ? white : Colors.black,
-                          fontSize: 13),
-                    )
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 18,
+              widget.pageName == "AudioDetails"
+                  ? const SizedBox()
+                  : InkWell(
+                      onTap: () {
+                        if (mounted) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => GoAyahSurah(
+                                pageName: widget.pageName,
+                              ),
+                            ),
+                          ).then((_) {
+                            // Close the popup menu after navigating back
+                            if (mounted) {
+                              Navigator.pop(context);
+                            }
+                          });
+                        }
+                      },
+                      child: Row(
+                        children: [
+                          Icon(Icons.swipe_vertical_rounded,
+                              size: screenWidth * 0.036,
+                              color: selectedColor == mode_3
+                                  ? white
+                                  : Colors.black54),
+                          SizedBox(
+                            width: screenHeight * 0.010,
+                          ),
+                          Text(
+                            "Go ayah",
+                            style: TextStyle(
+                                color: selectedColor == mode_3
+                                    ? white
+                                    : Colors.black,
+                                fontSize: screenWidth * 0.026),
+                          )
+                        ],
+                      ),
+                    ),
+              SizedBox(
+                height: screenHeight * 0.018,
               ),
               InkWell(
                 onTap: () {
@@ -488,23 +197,23 @@ class _CustomPopupMenuState extends State<CustomPopupMenu> {
                 child: Row(
                   children: [
                     Icon(Icons.settings,
-                        size: 18,
+                        size: screenHeight * 0.018,
                         color:
                             selectedColor == mode_3 ? white : Colors.black54),
-                    const SizedBox(
-                      width: 10,
+                    SizedBox(
+                      width: screenHeight * 0.010,
                     ),
                     Text(
                       "Settings",
                       style: TextStyle(
                           color: selectedColor == mode_3 ? white : Colors.black,
-                          fontSize: 13),
+                          fontSize: screenWidth * 0.026),
                     )
                   ],
                 ),
               ),
-              const SizedBox(
-                height: 18,
+              SizedBox(
+                height: screenHeight * 0.018,
               ),
               InkWell(
                 onTap: () {
@@ -534,43 +243,43 @@ class _CustomPopupMenuState extends State<CustomPopupMenu> {
                 child: Row(
                   children: [
                     Icon(Icons.settings_display_rounded,
-                        size: 18,
+                        size: screenWidth * 0.036,
                         color:
                             selectedColor == mode_3 ? white : Colors.black54),
-                    const SizedBox(
-                      width: 10,
+                    SizedBox(
+                      width: screenHeight * 0.010,
                     ),
                     Text(
                       "Appearance",
                       style: TextStyle(
                           color: selectedColor == mode_3 ? white : Colors.black,
-                          fontSize: 13),
+                          fontSize: screenWidth * 0.026),
                     )
                   ],
                 ),
               ),
-              const SizedBox(height: 10),
+              SizedBox(height: screenHeight * 0.010),
               Text(
                 "Text",
                 style: TextStyle(
                     color: selectedColor == mode_3 ? white : Colors.black,
-                    fontSize: 13),
+                    fontSize: screenWidth * 0.026),
               ),
               StatefulBuilder(
                 builder: (BuildContext context,
                     void Function(void Function()) setState) {
                   return SliderTheme(
                     data: SliderTheme.of(context).copyWith(
-                      trackHeight: 3.0,
+                      trackHeight: screenWidth * 0.006,
                       activeTickMarkColor: Colors.transparent,
                       inactiveTickMarkColor: Colors.transparent,
-                      thumbShape:
-                          const RoundSliderThumbShape(enabledThumbRadius: 8.0),
-                      overlayShape:
-                          const RoundSliderOverlayShape(overlayRadius: 12.0),
+                      thumbShape: RoundSliderThumbShape(
+                          enabledThumbRadius: screenWidth * 0.016),
+                      overlayShape: RoundSliderOverlayShape(
+                          overlayRadius: screenWidth * 0.024),
                     ),
                     child: Slider(
-                      min: 16,
+                      min: 10,
                       value: latinTextSizeProvider.currentLatinTextSize,
                       max: 40,
                       divisions: 10,
@@ -586,28 +295,28 @@ class _CustomPopupMenuState extends State<CustomPopupMenu> {
                   );
                 },
               ),
-              const SizedBox(height: 5),
+              SizedBox(height: screenHeight * 0.005),
               Text(
                 "Arabic",
                 style: TextStyle(
                     color: selectedColor == mode_3 ? white : Colors.black,
-                    fontSize: 13),
+                    fontSize: screenWidth * 0.026),
               ),
               StatefulBuilder(
                 builder: (BuildContext context,
                     void Function(void Function()) setState) {
                   return SliderTheme(
                     data: SliderTheme.of(context).copyWith(
-                      trackHeight: 3.0,
+                      trackHeight: screenWidth * 0.006,
                       activeTickMarkColor: Colors.transparent,
                       inactiveTickMarkColor: Colors.transparent,
-                      thumbShape:
-                          const RoundSliderThumbShape(enabledThumbRadius: 8.0),
-                      overlayShape:
-                          const RoundSliderOverlayShape(overlayRadius: 12.0),
+                      thumbShape: RoundSliderThumbShape(
+                          enabledThumbRadius: screenWidth * 0.016),
+                      overlayShape: RoundSliderOverlayShape(
+                          overlayRadius: screenWidth * 0.024),
                     ),
                     child: Slider(
-                      min: 16,
+                      min: 10,
                       value: arabicTextSizeProvider.currentArabicTextSize,
                       max: 40,
                       divisions: 10,
@@ -623,7 +332,7 @@ class _CustomPopupMenuState extends State<CustomPopupMenu> {
                   );
                 },
               ),
-              const SizedBox(height: 8),
+              SizedBox(height: screenHeight * 0.008),
               Consumer<ColorModel>(builder: (context, colorModel, _) {
                 return Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -634,8 +343,8 @@ class _CustomPopupMenuState extends State<CustomPopupMenu> {
                         Navigator.pop(context);
                       },
                       child: Container(
-                        height: 25,
-                        width: 50,
+                        height: screenHeight * 0.025,
+                        width: screenWidth * 0.100,
                         decoration: BoxDecoration(
                           borderRadius:
                               const BorderRadius.all(Radius.circular(3)),
@@ -653,8 +362,8 @@ class _CustomPopupMenuState extends State<CustomPopupMenu> {
                         Navigator.pop(context);
                       },
                       child: Container(
-                        height: 25,
-                        width: 50,
+                        height: screenHeight * 0.025,
+                        width: screenWidth * 0.100,
                         decoration: BoxDecoration(
                           borderRadius:
                               const BorderRadius.all(Radius.circular(3)),
@@ -672,8 +381,8 @@ class _CustomPopupMenuState extends State<CustomPopupMenu> {
                         Navigator.pop(context);
                       },
                       child: Container(
-                        height: 25,
-                        width: 50,
+                        height: screenHeight * 0.025,
+                        width: screenWidth * 0.100,
                         decoration: BoxDecoration(
                           borderRadius:
                               const BorderRadius.all(Radius.circular(3)),
@@ -693,6 +402,7 @@ class _CustomPopupMenuState extends State<CustomPopupMenu> {
         ),
         child: Icon(
           Icons.more_vert,
+          size: screenWidth * 0.044,
           color:
               selectedColor == mode_3 ? white.withOpacity(0.8) : Colors.black54,
         ),

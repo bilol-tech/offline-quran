@@ -37,12 +37,20 @@ class _SajdaHomeScreenState extends State<SajdaHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    final themeData = Theme.of(context);
+    final light = themeData.brightness == Brightness.light;
+    print(themeData.brightness == Brightness.light ? 'Light Mode' : 'Dark Mode');
+
     return sajdaAyahs.isEmpty
         ? const SizedBox.shrink()
         : Container(
       width: double.infinity,
       decoration: BoxDecoration(
-          color: gray,
+          color: light ? lightBackgroundWhite : gray,
+          border: Border.all(color: text, width: 0.11),
           borderRadius: const BorderRadius.all(Radius.circular(8))
       ),
       child: Padding(
@@ -50,10 +58,10 @@ class _SajdaHomeScreenState extends State<SajdaHomeScreen> {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.025),
               child: Row(
                 children: [
-                  Text("Sajda Ayahs", style: GoogleFonts.poppins(fontSize: 17, color: white, fontWeight: FontWeight.w500),),
+                  Text("Sajda Ayahs", style: GoogleFonts.poppins(fontSize: screenWidth * 0.045, color: light ? black : white, fontWeight: FontWeight.w500),),
                   const Spacer(),
                   GestureDetector(onTap: (){
                     Navigator.of(context).push(
@@ -70,20 +78,20 @@ class _SajdaHomeScreenState extends State<SajdaHomeScreen> {
                         },
                       ),
                     );
-                  },child: Text("See all", style: TextStyle(color: primary, fontSize: 12),)),
+                  },child: Text("See all", style: TextStyle(color: primary, fontSize: screenWidth * 0.03),)),
                 ],
               ),
             ),
             Divider(color: const Color(0xFF7B80AD).withOpacity(.35)),
             SizedBox(
-              height: 126,
+              height: screenWidth * 0.333,
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 14.0),
+                padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.035),
                 child: ListView.separated(
                   itemCount: 3,
                   physics: const NeverScrollableScrollPhysics(),
                   separatorBuilder: (context, index) => Padding(
-                    padding: const EdgeInsets.only(left: 20.0),
+                    padding: EdgeInsets.only(left: screenWidth * 0.045),
                     child: Divider(
                         color: const Color(0xFF7B80AD).withOpacity(.35)),
                   ),
@@ -118,20 +126,20 @@ class _SajdaHomeScreenState extends State<SajdaHomeScreen> {
                           Text("${sajdaAyahs.indexWhere((element) => element == sajdaAyah) + 1}",
                             style: GoogleFonts.poppins(
                                 color: text,
-                                fontSize: 13,
+                                fontSize: screenWidth * 0.035,
                                 fontWeight: FontWeight.w500),
                           ),
-                          const SizedBox(
-                            width: 16,
+                          SizedBox(
+                            width: screenWidth * 0.035,
                           ),
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 5.0),
                             child: Text(
                               "${sajdaAyah.surah.englishName}, ${sajdaAyah.numberInSurah}-Ayat",
                               style: GoogleFonts.poppins(
-                                  color: Colors.white,
+                                  color: light ? black : white,
                                   fontWeight: FontWeight.w500,
-                                  fontSize: 13),
+                                  fontSize: screenWidth * 0.036),
                             ),
                           ),
                         ],

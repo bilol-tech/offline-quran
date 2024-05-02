@@ -72,26 +72,31 @@ class _SignInState extends State<SignIn> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+    final themeData = Theme.of(context);
+    final light = themeData.brightness == Brightness.light;
+    print(themeData.brightness == Brightness.light ? 'Light Mode' : 'Dark Mode');
     return Scaffold(
-      backgroundColor: background,
+      backgroundColor: light ? lightBackgroundYellow : background,
       appBar: AppBar(
-        backgroundColor: gray,
+        backgroundColor: light ? white : gray,
         automaticallyImplyLeading: false,
         elevation: 0,
         title: Padding(
-          padding: const EdgeInsets.only(left: 10.0),
+          padding: EdgeInsets.only(left: screenHeight * 0.010),
           child: Text(
             'Sign in',
             style: GoogleFonts.poppins(
-                fontSize: 18,
+                fontSize: screenHeight * 0.018,
                 fontWeight: FontWeight.bold,
-                color: white.withOpacity(0.8)),
+                color: light ? Colors.black87 : white.withOpacity(0.8)),
           ),
         ),
       ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15),
+          padding: EdgeInsets.symmetric(horizontal: screenHeight * 0.020, vertical: screenHeight * 0.015),
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -99,56 +104,55 @@ class _SignInState extends State<SignIn> {
                 Text(
                   'Welcome',
                   style: TextStyle(
-                      fontSize: 22, fontWeight: FontWeight.bold, color: white),
+                      fontSize: screenHeight * 0.022, fontWeight: FontWeight.bold, color: light ? black : white),
                 ),
                 Text(
                   'To continue sign in to system',
                   style: TextStyle(
-                      fontSize: 14,
+                      fontSize: screenHeight * 0.014,
                       fontWeight: FontWeight.bold,
-                      color: white.withOpacity(0.7)),
+                      color: light ? Colors.black87 : white.withOpacity(0.7)),
                 ),
-                const SizedBox(
-                  height: 10,
+                SizedBox(
+                  height: screenHeight * 0.010,
                 ),
                 Container(
                   decoration: BoxDecoration(
                     borderRadius: const BorderRadius.all(Radius.circular(5)),
-                    color: modalSheetColor,
+                    color: light ? const Color(0xffEFEFEF) : modalSheetColor,
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(14.0),
                     child: Column(
                       children: [
                         SizedBox(
-                          height: 42,
+                          height: screenHeight * 0.042,
                           child: TextFormField(
-                            style: TextStyle(color: white, fontSize: 13),
+                            style: TextStyle(color: light ? black : white, fontSize: screenHeight * 0.013),
                             keyboardType: TextInputType.text,
                             controller: loginController,
                             decoration: InputDecoration(
                               border: OutlineInputBorder(
                                 borderRadius:
                                     const BorderRadius.all(Radius.circular(5)),
-                                borderSide: BorderSide(color: text),
+                                borderSide: BorderSide(color: light ? Colors.black87 : text),
                               ),
-                              contentPadding:
-                                  const EdgeInsets.only(top: 10, left: 8),
+                              contentPadding:  EdgeInsets.only(top: screenHeight * 0.010, left: screenHeight * 0.008),
                               label: const Text("Login"),
-                              labelStyle: TextStyle(fontSize: 13, color: text),
+                              labelStyle: TextStyle(fontSize: screenHeight * 0.013, color: light ? Colors.black87 : text),
                             ),
-                            cursorHeight: 15,
-                            cursorColor: white,
+                            cursorHeight: screenHeight * 0.015,
+                            cursorColor: light ? black : white,
                             onChanged: (_) => _updateButtonColor(),
                           ),
                         ),
-                        const SizedBox(
-                          height: 12,
+                        SizedBox(
+                          height: screenHeight * 0.012,
                         ),
                         SizedBox(
-                          height: 42,
+                          height: screenHeight * 0.042,
                           child: TextFormField(
-                            style: TextStyle(color: white, fontSize: 13),
+                            style: TextStyle(color: light ? black : white, fontSize: screenHeight * 0.013),
                             keyboardType: TextInputType.text,
                             controller: _passwordController,
                             obscureText: _isObscure,
@@ -156,30 +160,29 @@ class _SignInState extends State<SignIn> {
                               border: OutlineInputBorder(
                                 borderRadius:
                                     const BorderRadius.all(Radius.circular(5)),
-                                borderSide: BorderSide(color: text),
+                                borderSide: BorderSide(color: light ? Colors.black87 : text),
                               ),
-                              contentPadding:
-                                  const EdgeInsets.only(top: 10, left: 8),
+                              contentPadding: EdgeInsets.only(top: screenHeight * 0.010, left: screenHeight * 0.008),
                               label: const Text("Password"),
-                              labelStyle: TextStyle(fontSize: 13, color: text),
+                              labelStyle: TextStyle(fontSize: screenHeight * 0.013, color: light ? Colors.black87 : text),
                               suffixIcon: GestureDetector(
                                 onTap: _toggleObscure,
                                 child: Icon(
                                   _isObscure
                                       ? Icons.visibility_off
                                       : Icons.visibility,
-                                  size: 20,
-                                  color: text,
+                                  size: screenHeight * 0.020,
+                                  color: light ? Colors.black87 : text,
                                 ),
                               ),
                             ),
-                            cursorHeight: 15,
-                            cursorColor: white,
+                            cursorHeight: screenHeight * 0.015,
+                            cursorColor: light ? black : white,
                             onChanged: (_) => _updateButtonColor(),
                           ),
                         ),
-                        const SizedBox(
-                          height: 8,
+                        SizedBox(
+                          height: screenHeight * 0.008,
                         ),
                         Row(
                           children: [
@@ -198,13 +201,13 @@ class _SignInState extends State<SignIn> {
                               },
                               child: Text(
                                 "Forget Password?",
-                                style: TextStyle(color: white, fontSize: 10),
+                                style: TextStyle(color: light ? black : white, fontSize: screenHeight * 0.010),
                               ),
                             ),
                           ],
                         ),
-                        const SizedBox(
-                          height: 25,
+                        SizedBox(
+                          height: screenHeight * 0.025,
                         ),
                         InkWell(
                           onTap: () {
@@ -241,10 +244,9 @@ class _SignInState extends State<SignIn> {
                             }
                           },
                           child: Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 40.0),
+                            padding: EdgeInsets.symmetric(horizontal: screenHeight * 0.040),
                             child: Container(
-                              height: 40,
+                              height: screenHeight * 0.040,
                               decoration: BoxDecoration(
                                   borderRadius: const BorderRadius.all(
                                       Radius.circular(5)),
@@ -252,13 +254,13 @@ class _SignInState extends State<SignIn> {
                               child: Center(
                                   child: Text(
                                 "Sign in",
-                                style: TextStyle(color: white, fontSize: 12),
+                                style: TextStyle(color: white, fontSize: screenHeight * 0.012),
                               )),
                             ),
                           ),
                         ),
-                        const SizedBox(
-                          height: 15,
+                        SizedBox(
+                          height: screenHeight * 0.015,
                         ),
                         InkWell(
                           onTap: () {
@@ -275,8 +277,8 @@ class _SignInState extends State<SignIn> {
                               Text(
                                 "Don't have an account? ",
                                 style: TextStyle(
-                                  color: white,
-                                  fontSize: 12,
+                                  color: light ? black : white,
+                                  fontSize: screenHeight * 0.012,
                                   decoration: TextDecoration.underline,
                                 ),
                               ),
@@ -284,22 +286,22 @@ class _SignInState extends State<SignIn> {
                                 "Sign up",
                                 style: TextStyle(
                                   color: primary,
-                                  fontSize: 12,
+                                  fontSize: screenHeight * 0.012,
                                   decoration: TextDecoration.underline,
                                 ),
                               ),
                             ],
                           ),
                         ),
-                        const SizedBox(
-                          height: 5,
+                        SizedBox(
+                          height: screenHeight * 0.005,
                         ),
                       ],
                     ),
                   ),
                 ),
-                const SizedBox(
-                  height: 24,
+                SizedBox(
+                  height: screenHeight * 0.024,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -309,14 +311,14 @@ class _SignInState extends State<SignIn> {
                       decoration: BoxDecoration(
                           borderRadius:
                               const BorderRadius.all(Radius.circular(5)),
-                          border: Border.all(color: white)),
+                          border: Border.all(color: light ? black : white)),
                       child: Image.asset(
                         "assets/images/apple.png",
-                        width: 20,
+                        width: screenHeight * 0.020,
                       ),
                     ),
-                    const SizedBox(
-                      width: 17,
+                    SizedBox(
+                      width: screenHeight * 0.017,
                     ),
                     GestureDetector(
                       onTap: (){
@@ -327,25 +329,25 @@ class _SignInState extends State<SignIn> {
                         decoration: BoxDecoration(
                             borderRadius:
                                 const BorderRadius.all(Radius.circular(5)),
-                            border: Border.all(color: white)),
+                            border: Border.all(color: light ? black : white)),
                         child: Image.asset(
                           "assets/images/google.png",
-                          width: 20,
+                          width: screenHeight * 0.020,
                         ),
                       ),
                     ),
-                    const SizedBox(
-                      width: 17,
+                    SizedBox(
+                      width: screenHeight * 0.017,
                     ),
                     Container(
                       padding: const EdgeInsets.all(6),
                       decoration: BoxDecoration(
                           borderRadius:
                               const BorderRadius.all(Radius.circular(5)),
-                          border: Border.all(color: white)),
+                          border: Border.all(color: light ? black : white)),
                       child: Image.asset(
                         "assets/images/facebook.png",
-                        width: 20,
+                        width: screenHeight * 0.020,
                       ),
                     ),
                   ],

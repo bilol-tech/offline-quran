@@ -37,26 +37,34 @@ class _ParaHomeScreenState extends State<ParaHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    final themeData = Theme.of(context);
+    final light = themeData.brightness == Brightness.light;
+    print(themeData.brightness == Brightness.light ? 'Light Mode' : 'Dark Mode');
+
     return juzNumbers.isEmpty
         ? const SizedBox.shrink()
         : Container(
             width: double.infinity,
             decoration: BoxDecoration(
-                color: gray,
+                color: light ? lightBackgroundWhite : gray,
+                border: Border.all(color: text, width: 0.11),
                 borderRadius: const BorderRadius.all(Radius.circular(8))),
             child: Padding(
-              padding: const EdgeInsets.only(top: 12.0),
+              padding: EdgeInsets.only(top: screenWidth * 0.02),
               child: Column(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.025),
                     child: Row(
                       children: [
                         Text(
                           "Para",
                           style: GoogleFonts.poppins(
-                              fontSize: 17,
-                              color: white,
+                              fontSize: screenWidth * 0.045,
+                              color: light ? black : white,
                               fontWeight: FontWeight.w500),
                         ),
                         const Spacer(),
@@ -83,21 +91,21 @@ class _ParaHomeScreenState extends State<ParaHomeScreen> {
                             },
                             child: Text(
                               "See all",
-                              style: TextStyle(color: primary, fontSize: 12),
+                              style: TextStyle(color: primary, fontSize: screenWidth * 0.03),
                             )),
                       ],
                     ),
                   ),
                   Divider(color: const Color(0xFF7B80AD).withOpacity(.35)),
                   SizedBox(
-                    height: 160,
+                    height: screenWidth * 0.415,
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 14.0),
+                      padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.035),
                       child: ListView.separated(
                         itemCount: 3,
                         physics: const NeverScrollableScrollPhysics(),
                         separatorBuilder: (context, index) => Padding(
-                          padding: const EdgeInsets.only(left: 20.0),
+                          padding: EdgeInsets.only(left: screenWidth * 0.045),
                           child: Divider(
                               color: const Color(0xFF7B80AD).withOpacity(.35)),
                         ),
@@ -133,11 +141,11 @@ class _ParaHomeScreenState extends State<ParaHomeScreen> {
                                   juzNumber.number.toString(),
                                   style: GoogleFonts.poppins(
                                       color: text,
-                                      fontSize: 13,
+                                      fontSize: screenWidth * 0.035,
                                       fontWeight: FontWeight.w500),
                                 ),
-                                const SizedBox(
-                                  width: 16,
+                                SizedBox(
+                                  width: screenWidth * 0.035,
                                 ),
                                 Expanded(
                                     child: Column(
@@ -146,19 +154,19 @@ class _ParaHomeScreenState extends State<ParaHomeScreen> {
                                     Text(
                                       "${juzNumber.number.toString()}-Para",
                                       style: GoogleFonts.poppins(
-                                          color: Colors.white,
+                                          color: light ? black :white,
                                           fontWeight: FontWeight.w500,
-                                          fontSize: 13),
+                                          fontSize: screenWidth * 0.036),
                                     ),
-                                    const SizedBox(
-                                      height: 4,
+                                    SizedBox(
+                                      height: screenWidth * 0.010,
                                     ),
                                     Text(
                                       "${juzNumber.englishName}, start from ${juzNumber.numberInSurah} ayah",
                                       style: GoogleFonts.poppins(
                                           color: text,
                                           fontWeight: FontWeight.w500,
-                                          fontSize: 11),
+                                          fontSize: screenWidth * 0.027),
                                     )
                                   ],
                                 )),

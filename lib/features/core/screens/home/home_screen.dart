@@ -54,28 +54,35 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    final themeData = Theme.of(context);
+    final light = themeData.brightness == Brightness.light;
+    print(themeData.brightness == Brightness.light ? 'Light Mode' : 'Dark Mode');
+
     return Scaffold(
-      backgroundColor: background,
+      backgroundColor: light ? lightBackgroundYellow : background,
       appBar: AppBar(
-        backgroundColor: gray,
+        backgroundColor: light ? lightBackgroundWhite : gray,
         automaticallyImplyLeading: false,
         elevation: 0,
         centerTitle: false,
         title: Padding(
-          padding: const EdgeInsets.only(left: 10.0),
+          padding: EdgeInsets.only(left: screenWidth * 0.015),
           child: Text(
             'Main',
             style: GoogleFonts.poppins(
-                fontSize: 22,
+                fontSize: screenWidth * 0.06,
                 fontWeight: FontWeight.bold,
-                color: white.withOpacity(0.8)),
+                color: light ? black : white.withOpacity(0.8)),
           ),
         ),
         actions: [
           Padding(
-            padding: const EdgeInsets.only(right: 10.0),
+            padding: EdgeInsets.only(right: screenWidth * 0.020),
             child: IconButton(
-              icon: SvgPicture.asset('assets/svgs/search-icon.svg'),
+              icon: SvgPicture.asset('assets/svgs/search-icon.svg', width: screenWidth * 0.055, color: light ? Colors.black87 : text),
               onPressed: () {
                 showSearch(
                   context: context,
@@ -88,30 +95,31 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.only(left: 22.0, right: 22.0),
+          padding: EdgeInsets.only(left: screenWidth * 0.030, right:  screenWidth * 0.030),
           child: SingleChildScrollView(
             child: Column(
               children: [
-                const SizedBox(height: 17,),
+                SizedBox(height: screenWidth * 0.040,),
                 Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
-                      color: gray
+                      color: light ? lightBackgroundWhite : gray,
+                      border: Border.all(color: text, width: 0.11),
                       ),
                   child: Column(
                     children: [
-                      const SizedBox(height: 5,),
-                      Text("Random Ayah", style: GoogleFonts.poppins(fontSize: 16, color: white, fontWeight: FontWeight.w700),),
-                      const SizedBox(height: 15,),
+                      SizedBox(height: screenWidth * 0.010,),
+                      Text("Random Ayah", style: GoogleFonts.poppins(fontSize: screenWidth * 0.04, color: light ? black : white, fontWeight: FontWeight.w700),),
+                      SizedBox(height: screenWidth * 0.025,),
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                        padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.022),
                         child: randomAyah != null
                             ? Text(
                           randomAyah!.text,
                           style: GoogleFonts.amiri(
-                            color: white,
-                            fontSize: 16,
+                            color: light ? black : white,
+                            fontSize: screenWidth * 0.05,
                             height: 2.3,
                             letterSpacing: 0.2,
                             fontWeight: FontWeight.bold,
@@ -127,13 +135,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 //     bottom: 0,
                 //     right: 0,
                 //     child: SvgPicture.asset('assets/svgs/quran.svg')),
-                const SizedBox(height: 15,),
+                SizedBox(height: screenWidth * 0.035,),
                 const SurahHomeScreen(),
-                const SizedBox(height: 15,),
+                SizedBox(height: screenWidth * 0.035,),
                 const ParaHomeScreen(),
-                const SizedBox(height: 15,),
+                SizedBox(height: screenWidth * 0.035,),
                 const SajdaHomeScreen(),
-                const SizedBox(height: 17,),
+                SizedBox(height: screenWidth * 0.035,),
               ],
             ),
           ),

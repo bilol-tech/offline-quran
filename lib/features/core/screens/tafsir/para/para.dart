@@ -34,8 +34,13 @@ class _ParaPageState extends State<ParaPage> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+    final themeData = Theme.of(context);
+    final light = themeData.brightness == Brightness.light;
+    print(themeData.brightness == Brightness.light ? 'Light Mode' : 'Dark Mode');
     return juzNumbers.isEmpty
-        ? Center(child: Lottie.asset("assets/animation/loading.json", width: 120))
+        ? Center(child: Lottie.asset("assets/animation/loading.json", width: screenWidth * 0.250))
         : ListView.separated(
       itemCount: juzNumbers.length,
       itemBuilder: (context, index) {
@@ -65,15 +70,15 @@ class _ParaPageState extends State<ParaPage> {
               Text(
                 "${juzNumber.number}-Para",
                 style: GoogleFonts.poppins(
-                  color: Colors.white,
-                  fontSize: 16,
+                  color: light ? black : white,
+                  fontSize: screenWidth * 0.04,
                 ),
               ),
               Text(
                 "${juzNumber.englishName}, start from ${juzNumber.numberInSurah} ayah",
                 style: GoogleFonts.poppins(
                   color: text,
-                  fontSize: 14,
+                  fontSize: screenWidth * 0.031,
                 ),
               ),
               if (index == juzNumbers.length - 1)

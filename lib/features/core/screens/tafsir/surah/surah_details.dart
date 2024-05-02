@@ -86,7 +86,8 @@ class _SurahDetailsState extends State<SurahDetails> {
   @override
   Widget build(BuildContext context) {
     final ItemScrollController itemScrollController = ItemScrollController();
-
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
     final latinTextSizeProvider = Provider.of<LatinTextSizeProvider>(context);
     final arabicTextSizeProvider = Provider.of<ArabicTextSizeProvider>(context);
     Color? selectedColor = Provider.of<ColorModel>(context).selectedColor;
@@ -103,7 +104,8 @@ class _SurahDetailsState extends State<SurahDetails> {
         backgroundColor: selectedColor,
         automaticallyImplyLeading: false,
         elevation: 10,
-        title: Row(children: [
+        title: Row(
+            children: [
           IconButton(
               onPressed: (() => Navigator.of(context).pop()),
               icon: SvgPicture.asset(
@@ -111,14 +113,15 @@ class _SurahDetailsState extends State<SurahDetails> {
                 color: selectedColor == mode_3
                     ? white.withOpacity(0.8)
                     : Colors.black54,
+                width: screenWidth* 0.055,
               )),
-          const SizedBox(
-            width: 24,
+          SizedBox(
+            width: screenWidth * 0.045,
           ),
           Text(
             widget.surahName,
             style: GoogleFonts.poppins(
-                fontSize: 20,
+                fontSize: screenWidth * 0.05,
                 fontWeight: FontWeight.bold,
                 color: selectedColor == mode_3
                     ? white.withOpacity(0.8)
@@ -133,18 +136,18 @@ class _SurahDetailsState extends State<SurahDetails> {
       ),
       body: ayahs.isEmpty || ayahsTranslated.isEmpty
           ? Center(
-          child: Lottie.asset("assets/animation/loading.json", width: 120))
+          child: Lottie.asset("assets/animation/loading.json", width: screenWidth * 0.250))
           : Stack(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
+            padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
             child: ScrollablePositionedList.separated(
               itemScrollController: itemScrollController,
               itemBuilder: (context, index) {
                 SurahAyah ayah = ayahs[index];
                 AyahTranslated ayahTranslated = ayahsTranslated[index];
                 return Padding(
-                  padding: const EdgeInsets.only(top: 10, bottom: 14),
+                  padding: EdgeInsets.only(top: screenWidth * 0.020, bottom: screenWidth * 0.024),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
@@ -171,8 +174,8 @@ class _SurahDetailsState extends State<SurahDetails> {
                             fontSize: latinTextSizeProvider
                                 .currentLatinTextSize),
                       ),
-                      const SizedBox(
-                        height: 12,
+                      SizedBox(
+                        height: screenWidth * 0.025,
                       ),
                       Row(
                         children: [
@@ -202,8 +205,8 @@ class _SurahDetailsState extends State<SurahDetails> {
                               ),
                             ),
                           ),
-                          const SizedBox(
-                            width: 5,
+                          SizedBox(
+                            width: screenWidth * 0.010,
                           ),
                           InkWell(
                             onTap: () {

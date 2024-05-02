@@ -11,31 +11,36 @@ class ErrorScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+    final themeData = Theme.of(context);
+    final light = themeData.brightness == Brightness.light;
+    print(themeData.brightness == Brightness.light ? 'Light Mode' : 'Dark Mode');
     return Scaffold(
       body: Container(
-        color: gray,
+        color: light ? white : gray,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset(
               "assets/images/cancel.png",
-              width: 150,
-              height: 150,
+              width: screenWidth * 0.300,
+              height: screenHeight * 0.150,
             ),
-            const SizedBox(height: 20,),
+            SizedBox(height: screenHeight * 0.020,),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12.0),
+              padding: EdgeInsets.symmetric(horizontal: screenHeight * 0.012),
               child: RichText(
                 textAlign: TextAlign.center,
                 text: TextSpan(
-                  style: GoogleFonts.poppins(color: text, fontSize: 16),
+                  style: GoogleFonts.poppins(color: light ? Colors.black87 : text, fontSize: screenWidth * 0.036),
                   children: [
                     TextSpan(
                       text: "Alert: ",
                       style: TextStyle(
                           color: primary,
                           fontWeight: FontWeight.bold,
-                          fontSize: 18
+                          fontSize: screenWidth * 0.036
                       ),
                     ),
                     const TextSpan(
@@ -46,7 +51,7 @@ class ErrorScreen extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 100,),
+            SizedBox(height: screenHeight * 0.100,),
             InkWell(
               onTap: (){
                 Navigator.of(context).pushAndRemoveUntil(
@@ -57,16 +62,16 @@ class ErrorScreen extends StatelessWidget {
                 );
               },
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 80.0),
+                padding: EdgeInsets.symmetric(horizontal: screenHeight * 0.080),
                 child: Container(
                   width: double.infinity,
-                  height: 40,
+                  height: screenHeight * 0.040,
                   decoration: BoxDecoration(
                       borderRadius: const BorderRadius.all(Radius.circular(5)),
                       border: Border.all(color: text)
                   ),
                   child: Center(
-                    child: Text('Go Back', style: GoogleFonts.poppins(fontSize: 16, color: white),
+                    child: Text('Go Back', style: GoogleFonts.poppins(fontSize: screenWidth * 0.036, color: light ? black : white),
                     ),
                   ),
                 ),

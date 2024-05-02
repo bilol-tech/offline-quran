@@ -6,6 +6,8 @@ class NoInternetPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -13,11 +15,11 @@ class NoInternetPage extends StatelessWidget {
         Center(
           child: Image.asset(
             "assets/images/no_internet.png",
-            width: 60,
+            width: screenWidth * 0.120,
           ),
         ),
-        const SizedBox(height: 8,),
-        Center(child: Text("No Internet Connection", style: GoogleFonts.poppins(fontSize: 20, fontWeight: FontWeight.bold),))
+        SizedBox(height: screenHeight * 0.008,),
+        Center(child: Text("No Internet Connection", style: GoogleFonts.poppins(fontSize: screenWidth * 0.040, fontWeight: FontWeight.bold),))
       ],
     );
   }

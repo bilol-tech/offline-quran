@@ -34,9 +34,14 @@ class _SurahPageState extends State<SurahPage> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+    final themeData = Theme.of(context);
+    final light = themeData.brightness == Brightness.light;
+    print(themeData.brightness == Brightness.light ? 'Light Mode' : 'Dark Mode');
     return surahs.isEmpty
         ? Center(
-        child: Lottie.asset("assets/animation/loading.json", width: 120))
+        child: Lottie.asset("assets/animation/loading.json", width: screenWidth * 0.250))
         : ListView.separated(
       itemCount: surahs.length,
       separatorBuilder: (context, index) => Divider(
@@ -68,27 +73,24 @@ class _SurahPageState extends State<SurahPage> {
             );
           },
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16),
+            padding: EdgeInsets.symmetric(vertical: screenWidth * 0.025),
             child: Row(
               children: [
                 Stack(
+                  alignment: Alignment.center,
                   children: [
-                    SvgPicture.asset('assets/svgs/nomor-surah.svg'),
-                    SizedBox(
-                      height: 36,
-                      width: 36,
-                      child: Center(
-                          child: Text(
-                            "${surah.number}",
-                            style: GoogleFonts.poppins(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w500),
-                          )),
+                    SvgPicture.asset('assets/svgs/nomor-surah.svg', width: screenWidth * 0.080,),
+                    Text(
+                      "${surah.number}",
+                      style: GoogleFonts.poppins(
+                          color: light ? Colors.black87 : white,
+                          fontSize: screenWidth * 0.03,
+                          fontWeight: FontWeight.w500),
                     )
                   ],
                 ),
-                const SizedBox(
-                  width: 16,
+                SizedBox(
+                  width: screenWidth * 0.040,
                 ),
                 Expanded(
                     child: Column(
@@ -97,12 +99,13 @@ class _SurahPageState extends State<SurahPage> {
                         Text(
                           surah.englishName,
                           style: GoogleFonts.poppins(
-                              color: Colors.white,
+                              color: light ? black : white,
                               fontWeight: FontWeight.w500,
-                              fontSize: 16),
+                              fontSize: screenWidth * 0.04
+                          ),
                         ),
-                        const SizedBox(
-                          height: 4,
+                        SizedBox(
+                          height: screenHeight * 0.004,
                         ),
                         Row(
                           children: [
@@ -111,27 +114,29 @@ class _SurahPageState extends State<SurahPage> {
                               style: GoogleFonts.poppins(
                                   color: text,
                                   fontWeight: FontWeight.w500,
-                                  fontSize: 12),
+                                  fontSize: screenWidth * 0.03
+                              ),
                             ),
-                            const SizedBox(
-                              width: 5,
+                            SizedBox(
+                              width: screenWidth * 0.015,
                             ),
                             Container(
-                              width: 4,
-                              height: 4,
+                              width: screenWidth * 0.010,
+                              height: screenHeight * 0.005,
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(2),
                                   color: text),
                             ),
-                            const SizedBox(
-                              width: 5,
+                            SizedBox(
+                              width: screenWidth * 0.015,
                             ),
                             Text(
                               "${surah.numberOfAyahs} Ayat",
                               style: GoogleFonts.poppins(
                                   color: text,
                                   fontWeight: FontWeight.w500,
-                                  fontSize: 12),
+                                  fontSize: screenWidth * 0.031
+                              ),
                             ),
                           ],
                         )
@@ -141,7 +146,7 @@ class _SurahPageState extends State<SurahPage> {
                   surah.name.split(' ').skip(1).join(' '),
                   style: GoogleFonts.amiri(
                       color: primary,
-                      fontSize: 20,
+                      fontSize: screenWidth * 0.042,
                       fontWeight: FontWeight.bold),
                 ),
               ],

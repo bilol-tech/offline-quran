@@ -44,32 +44,40 @@ class _DonatePageState extends State<DonatePage> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    final themeData = Theme.of(context);
+    final light = themeData.brightness == Brightness.light;
+    print(themeData.brightness == Brightness.light ? 'Light Mode' : 'Dark Mode');
+
     return BlocBuilder<InternetCubit, InternetStatus>(
       builder: (context, state) {
         return Scaffold(
-          backgroundColor: background,
+          backgroundColor: light ? lightBackgroundYellow : background,
           appBar: AppBar(
-            backgroundColor: gray,
+            backgroundColor: light ? white : gray,
             automaticallyImplyLeading: false,
-            elevation: 10,
+            elevation: 0,
             title: Row(
               children: [
                 IconButton(
                   onPressed: (() => Navigator.of(context).pop()),
                   icon: SvgPicture.asset(
                     'assets/svgs/back-icon.svg',
-                    color: white.withOpacity(0.8),
+                    width: screenWidth * 0.055,
+                    color: light ? Colors.black87 : white.withOpacity(0.8),
                   ),
                 ),
-                const SizedBox(
-                  width: 24,
+                SizedBox(
+                  width: screenHeight * 0.024,
                 ),
                 Text(
                   'Donate',
                   style: GoogleFonts.poppins(
-                    fontSize: 22,
+                    fontSize: screenWidth * 0.044,
                     fontWeight: FontWeight.bold,
-                    color: white.withOpacity(0.8),
+                    color: light ? black : white.withOpacity(0.8),
                   ),
                 ),
               ],
@@ -82,7 +90,7 @@ class _DonatePageState extends State<DonatePage> {
                 initialUrl: url,
                 gestureNavigationEnabled: true,
                 javascriptMode: JavascriptMode.unrestricted,
-                backgroundColor: background,
+                backgroundColor: light ? lightBackgroundYellow : background,
                 onPageStarted: (String url) {
                   setState(() {
                     isLoading = true;
@@ -98,7 +106,7 @@ class _DonatePageState extends State<DonatePage> {
                 Center(
                   child: Lottie.asset(
                     "assets/animation/loading.json",
-                    width: 120,
+                    width: screenWidth * 0.250,
                   ),
                 )
             ],

@@ -37,14 +37,19 @@ class _SajdaPageState extends State<SajdaPage> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+    final themeData = Theme.of(context);
+    final light = themeData.brightness == Brightness.light;
+    print(themeData.brightness == Brightness.light ? 'Light Mode' : 'Dark Mode');
     return sajdaAyahs.isEmpty
-        ? Center(child: Lottie.asset("assets/animation/loading.json", width: 120))
+        ? Center(child: Lottie.asset("assets/animation/loading.json", width: screenWidth * 0.250))
         : ListView.builder(
       itemCount: sajdaAyahs.length,
       itemBuilder: (context, index) {
         SajdaAyahs sajdaAyah = sajdaAyahs[index];
         return Padding(
-          padding: const EdgeInsets.only(top: 20.0),
+          padding: EdgeInsets.only(top: screenWidth * 0.040),
           child: GestureDetector(
             onTap: () {
               Navigator.of(context).push(
@@ -74,12 +79,12 @@ class _SajdaPageState extends State<SajdaPage> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 SizedBox(
-                  width: 40,
-                  child: Text("${sajdaAyahs.indexWhere((element) => element == sajdaAyah) + 1}", style: GoogleFonts.poppins(color: white, fontSize: 18)),
+                  width: screenWidth * 0.090,
+                  child: Text("${sajdaAyahs.indexWhere((element) => element == sajdaAyah) + 1}", style: GoogleFonts.poppins(color: light ? black : white, fontSize: screenWidth * 0.036)),
                 ),
-                Text('${sajdaAyah.surah.englishName}, ${sajdaAyah.numberInSurah.toString()}-Ayat', textAlign: TextAlign.center, style: GoogleFonts.poppins(color: white, fontWeight: FontWeight.w500, fontSize: 16)),
+                Text('${sajdaAyah.surah.englishName}, ${sajdaAyah.numberInSurah.toString()}-Ayat', textAlign: TextAlign.center, style: GoogleFonts.poppins(color: light ? black :  white, fontWeight: FontWeight.w500, fontSize: screenWidth * 0.036)),
                 const Spacer(),
-                Icon(Icons.arrow_forward_ios_rounded, color: white, size: 15)
+                Icon(Icons.arrow_forward_ios_rounded, color: light ? black :  white, size: screenWidth * 0.035)
               ],
             ),
           ),

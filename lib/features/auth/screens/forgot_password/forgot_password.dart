@@ -52,17 +52,24 @@ class _ForgotPasswordState extends State<ForgotPassword> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    final themeData = Theme.of(context);
+    final light = themeData.brightness == Brightness.light;
+    print(themeData.brightness == Brightness.light ? 'Light Mode' : 'Dark Mode');
+
     return Scaffold(
-      backgroundColor: background,
+      backgroundColor: light ? lightBackgroundYellow : background,
       appBar: AppBar(
-        backgroundColor: background,
+        backgroundColor: light ? lightBackgroundYellow : background,
         leading: InkWell(onTap: (){
           Navigator.pop(context);
-        }, child: Icon(Icons.arrow_back, size: 20, color: text,)),
+        }, child: Icon(Icons.arrow_back, size: screenHeight * 0.020, color: light ? black : text,)),
       ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15),
+          padding: EdgeInsets.symmetric(horizontal: screenHeight * 0.020, vertical: screenHeight * 0.015),
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -70,32 +77,32 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 Text(
                   'Forget Password?',
                   style: TextStyle(
-                      fontSize: 22, fontWeight: FontWeight.bold, color: white),
+                      fontSize: screenHeight * 0.022, fontWeight: FontWeight.bold, color: light ? black : white),
                 ),
                 Text(
                   'Enter your email address',
                   style: TextStyle(
-                      fontSize: 14,
+                      fontSize: screenHeight * 0.014,
                       fontWeight: FontWeight.bold,
-                      color: white.withOpacity(0.7)),
+                      color: light ? Colors.black87 : white.withOpacity(0.7)),
                 ),
-                const SizedBox(
-                  height: 10,
+                SizedBox(
+                  height: screenHeight * 0.010,
                 ),
                 Container(
                   decoration: BoxDecoration(
                     borderRadius: const BorderRadius.all(Radius.circular(5)),
-                    color: modalSheetColor,
+                    color: light ? const Color(0xffEFEFEF) : modalSheetColor,
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(14.0),
                     child: Column(
                       children: [
-                        const SizedBox(height: 20,),
+                        SizedBox(height: screenHeight * 0.020,),
                         SizedBox(
-                          height: 42,
+                          height: screenHeight * 0.042,
                           child: TextFormField(
-                            style: TextStyle(color: white, fontSize: 13),
+                            style: TextStyle(color: light ? black : white, fontSize: screenHeight * 0.013),
                             keyboardType: TextInputType.text,
                             readOnly: true,
                             initialValue: widget.email,
@@ -106,16 +113,16 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                 borderSide: BorderSide(color: text),
                               ),
                               contentPadding:
-                              const EdgeInsets.only(top: 10, left: 8),
+                              EdgeInsets.only(top: screenHeight * 0.010, left: screenHeight * 0.008),
                               label: const Text("Login"),
-                              labelStyle: TextStyle(fontSize: 13, color: text),
+                              labelStyle: TextStyle(fontSize: screenHeight * 0.013, color: light ? Colors.black87 : text),
                             ),
-                            cursorHeight: 15,
+                            cursorHeight: screenHeight * 0.015,
                             cursorColor: white,
                             onChanged: (_) => _updateButtonColor(),
                           ),
                         ),
-                        const SizedBox(height: 30,),
+                        SizedBox(height: screenHeight * 0.030,),
                         InkWell(
                           onTap: () {
                             if (widget.email.isEmpty) {
@@ -152,9 +159,9 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                           },
                           child: Padding(
                             padding:
-                            const EdgeInsets.symmetric(horizontal: 40.0),
+                            EdgeInsets.symmetric(horizontal: screenHeight * 0.040),
                             child: Container(
-                              height: 40,
+                              height: screenHeight * 0.040,
                               decoration: BoxDecoration(
                                   borderRadius: const BorderRadius.all(
                                       Radius.circular(5)),
@@ -162,13 +169,13 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                               child: Center(
                                   child: Text(
                                     "Reset Password",
-                                    style: TextStyle(color: white, fontSize: 12),
+                                    style: TextStyle(color: white, fontSize: screenHeight * 0.012),
                                   )),
                             ),
                           ),
                         ),
-                        const SizedBox(
-                          height: 15,
+                        SizedBox(
+                          height: screenHeight * 0.015,
                         ),
                       ],
                     ),

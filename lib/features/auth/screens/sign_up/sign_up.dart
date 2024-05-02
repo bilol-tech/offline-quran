@@ -86,11 +86,16 @@ class _SignUpState extends State<SignUp> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+    final themeData = Theme.of(context);
+    final light = themeData.brightness == Brightness.light;
+    print(themeData.brightness == Brightness.light ? 'Light Mode' : 'Dark Mode');
     return Scaffold(
-      backgroundColor: background,
+      backgroundColor: light ? lightBackgroundYellow : background,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15),
+          padding: EdgeInsets.symmetric(horizontal: screenHeight * 0.020, vertical: screenHeight * 0.015),
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -98,27 +103,25 @@ class _SignUpState extends State<SignUp> {
                 Text(
                   'Sign Up',
                   style: TextStyle(
-                      fontSize: 22, fontWeight: FontWeight.bold, color: white),
+                      fontSize: screenHeight * 0.022, fontWeight: FontWeight.bold, color: light ? black : white),
                 ),
-                const SizedBox(
-                  height: 35,
+                SizedBox(
+                  height: screenHeight * 0.035,
                 ),
                 Container(
                   decoration: BoxDecoration(
                     borderRadius: const BorderRadius.all(Radius.circular(5)),
-                    color: modalSheetColor,
+                    color: light ? const Color(0xffEFEFEF) : modalSheetColor,
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(14.0),
                     child: Column(
                       children: [
-                        const SizedBox(
-                          height: 15,
-                        ),
+                         SizedBox(height: screenHeight * 0.015),
                         SizedBox(
-                          height: 42,
+                          height: screenHeight * 0.042,
                           child: TextFormField(
-                            style: TextStyle(color: white, fontSize: 13),
+                            style: TextStyle(color: light ? black : white, fontSize: screenHeight * 0.013),
                             keyboardType: TextInputType.text,
                             controller: emailController,
                             decoration: InputDecoration(
@@ -127,48 +130,46 @@ class _SignUpState extends State<SignUp> {
                                     const BorderRadius.all(Radius.circular(5)),
                                 borderSide: BorderSide(color: text),
                               ),
-                              contentPadding:
-                                  const EdgeInsets.only(top: 10, left: 8),
+                              contentPadding: EdgeInsets.only(top: screenHeight * 0.010, left: screenHeight * 0.008),
                               label: const Text("Email *"),
-                              labelStyle: TextStyle(fontSize: 13, color: text),
+                              labelStyle: TextStyle(fontSize: screenHeight * 0.013, color: light ? Colors.black87 : text),
                             ),
-                            cursorHeight: 15,
+                            cursorHeight: screenHeight * 0.015,
                             onChanged: (_) => _updateButtonColor(),
-                            cursorColor: white,
+                            cursorColor: light ? black : white,
                           ),
                         ),
-                        const SizedBox(
-                          height: 33,
+                        SizedBox(
+                          height: screenHeight * 0.033,
                         ),
                         SizedBox(
-                          height: 42,
+                          height: screenHeight * 0.042,
                           child: TextFormField(
-                            style: TextStyle(color: white, fontSize: 13),
+                            style: TextStyle(color: light ? black : white, fontSize: screenHeight * 0.013),
                             keyboardType: TextInputType.text,
                             controller: name,
                             decoration: InputDecoration(
                               border: OutlineInputBorder(
                                 borderRadius:
                                 const BorderRadius.all(Radius.circular(5)),
-                                borderSide: BorderSide(color: text),
+                                borderSide: BorderSide(color: light ? Colors.black87 : text),
                               ),
-                              contentPadding:
-                              const EdgeInsets.only(top: 10, left: 8),
+                              contentPadding: EdgeInsets.only(top: screenHeight * 010, left: screenHeight * 0.008),
                               label: const Text("Name/Surname*"),
-                              labelStyle: TextStyle(fontSize: 13, color: text),
+                              labelStyle: TextStyle(fontSize: screenHeight * 0.013, color: light ? Colors.black87 : text),
                             ),
-                            cursorHeight: 15,
+                            cursorHeight: screenHeight * 0.015,
                             onChanged: (_) => _updateButtonColor(),
-                            cursorColor: white,
+                            cursorColor: light ? black : white,
                           ),
                         ),
-                        const SizedBox(
-                          height: 33,
+                        SizedBox(
+                          height: screenHeight * 0.033,
                         ),
                         SizedBox(
-                          height: 42,
+                          height: screenHeight * 0.042,
                           child: TextFormField(
-                            style: TextStyle(color: white, fontSize: 13),
+                            style: TextStyle(color: light ? black : white, fontSize: screenHeight * 0.013),
                             keyboardType: TextInputType.text,
                             controller: passwordController,
                             obscureText: _isObscurePassword,
@@ -176,35 +177,34 @@ class _SignUpState extends State<SignUp> {
                               border: OutlineInputBorder(
                                 borderRadius:
                                     const BorderRadius.all(Radius.circular(5)),
-                                borderSide: BorderSide(color: text),
+                                borderSide: BorderSide(color: light ? Colors.black87 : text),
                               ),
-                              contentPadding:
-                                  const EdgeInsets.only(top: 10, left: 8),
+                              contentPadding: EdgeInsets.only(top: screenHeight * 0.010, left: screenHeight * 0.008),
                               label: const Text("Password *"),
-                              labelStyle: TextStyle(fontSize: 13, color: text),
+                              labelStyle: TextStyle(fontSize: screenHeight * 0.013, color: light ? Colors.black87 : text),
                               suffixIcon: GestureDetector(
                                 onTap: _toggleObscurePassword,
                                 child: Icon(
                                   _isObscurePassword
                                       ? Icons.visibility_off
                                       : Icons.visibility,
-                                  size: 20,
-                                  color: text,
+                                  size: screenHeight * 0.020,
+                                  color: light ? Colors.black87 : text,
                                 ),
                               ),
                             ),
-                            cursorHeight: 15,
-                            cursorColor: white,
+                            cursorHeight: screenHeight * 0.015,
+                            cursorColor: light ? black : white,
                             onChanged: (_) => _updateButtonColor(),
                           ),
                         ),
-                        const SizedBox(
-                          height: 33,
+                        SizedBox(
+                          height: screenHeight * 0.033,
                         ),
                         SizedBox(
-                          height: 42,
+                          height: screenHeight * 0.042,
                           child: TextFormField(
-                            style: TextStyle(color: white, fontSize: 13),
+                            style: TextStyle(color: light ? black : white, fontSize: screenHeight * 0.013),
                             keyboardType: TextInputType.text,
                             controller: repeatPasswordController,
                             obscureText: _isObscureReEnterPassword,
@@ -212,30 +212,29 @@ class _SignUpState extends State<SignUp> {
                               border: OutlineInputBorder(
                                 borderRadius:
                                     const BorderRadius.all(Radius.circular(5)),
-                                borderSide: BorderSide(color: text),
+                                borderSide: BorderSide(color: light ? Colors.black87 : text),
                               ),
-                              contentPadding:
-                                  const EdgeInsets.only(top: 10, left: 8),
+                              contentPadding: EdgeInsets.only(top: screenHeight * 0.010, left: screenHeight * 0.008),
                               label: const Text("Password again *"),
-                              labelStyle: TextStyle(fontSize: 13, color: text),
+                              labelStyle: TextStyle(fontSize: screenHeight * 0.013, color: light ? Colors.black87 : text),
                               suffixIcon: GestureDetector(
                                 onTap: _toggleObscureReEnterPassword,
                                 child: Icon(
                                   _isObscureReEnterPassword
                                       ? Icons.visibility_off
                                       : Icons.visibility,
-                                  size: 20,
-                                  color: text,
+                                  size: screenHeight * 0.020,
+                                  color: light ? Colors.black87 : text,
                                 ),
                               ),
                             ),
-                            cursorHeight: 15,
-                            cursorColor: white,
+                            cursorHeight: screenHeight * 0.015,
+                            cursorColor: light ? black : white,
                             onChanged: (_) => _updateButtonColor(),
                           ),
                         ),
-                        const SizedBox(
-                          height: 30,
+                        SizedBox(
+                          height: screenHeight * 0.030,
                         ),
                       InkWell(
                         onTap: () async {
@@ -276,9 +275,9 @@ class _SignUpState extends State<SignUp> {
                           }
                         },
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 40.0),
+                            padding: EdgeInsets.symmetric(horizontal: screenHeight * 0.040),
                             child: Container(
-                              height: 40,
+                              height: screenHeight * 0.040,
                               decoration: BoxDecoration(
                                   borderRadius:
                                       const BorderRadius.all(Radius.circular(5)),
@@ -286,13 +285,13 @@ class _SignUpState extends State<SignUp> {
                               child: Center(
                                   child: Text(
                                 "Continue",
-                                style: TextStyle(color: white, fontSize: 12),
+                                style: TextStyle(color: white, fontSize: screenHeight * 0.012),
                               )),
                             ),
                           ),
                         ),
-                        const SizedBox(
-                          height: 20,
+                        SizedBox(
+                          height: screenHeight * 0.020,
                         ),
                         InkWell(
                           onTap: () {
@@ -309,8 +308,8 @@ class _SignUpState extends State<SignUp> {
                               Text(
                                 "Already have an account? ",
                                 style: TextStyle(
-                                  color: white,
-                                  fontSize: 12,
+                                  color: light ? black : white,
+                                  fontSize: screenHeight * 0.012,
                                   decoration: TextDecoration.underline,
                                 ),
                               ),
@@ -318,15 +317,15 @@ class _SignUpState extends State<SignUp> {
                                 "Sign in",
                                 style: TextStyle(
                                   color: primary,
-                                  fontSize: 12,
+                                  fontSize: screenHeight * 0.012,
                                   decoration: TextDecoration.underline,
                                 ),
                               ),
                             ],
                           ),
                         ),
-                        const SizedBox(
-                          height: 5,
+                        SizedBox(
+                          height: screenHeight * 0.005,
                         ),
                       ],
                     ),

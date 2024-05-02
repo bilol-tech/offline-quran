@@ -17,16 +17,25 @@ class CustomSearch extends SearchDelegate {
 
   @override
   ThemeData appBarTheme(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
     final ThemeData theme = Theme.of(context);
 
+    final themeData = Theme.of(context);
+    final light = themeData.brightness == Brightness.light;
+    print(themeData.brightness == Brightness.light ? 'Light Mode' : 'Dark Mode');
+
     return theme.copyWith(
+      textTheme: TextTheme(
+        bodyText1: TextStyle(color: light ? black : white, fontSize: screenWidth * 0.040),
+      ),
       appBarTheme: AppBarTheme(
-        backgroundColor: gray,
-        iconTheme: theme.primaryIconTheme.copyWith(color: white),
+        backgroundColor: light ? white : gray,
+        iconTheme: theme.primaryIconTheme.copyWith(color: light ? black : white),
       ),
       inputDecorationTheme: InputDecorationTheme(
-        hintStyle: GoogleFonts.poppins(color: white, fontSize: 17),
-        labelStyle: GoogleFonts.poppins(color: white, fontSize: 17),
+        hintStyle: GoogleFonts.poppins(color: light ? black : white, fontSize: screenWidth * 0.034),
+        labelStyle: GoogleFonts.poppins(color: light ? black : white, fontSize: screenWidth * 0.034),
         border: InputBorder.none,
       ),
     );
@@ -34,12 +43,14 @@ class CustomSearch extends SearchDelegate {
 
   @override
   List<Widget>? buildActions(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
     return [
       IconButton(
         onPressed: () {
           query = '';
         },
-        icon: const Icon(Icons.clear),
+        icon: Icon(Icons.clear, size: screenWidth * 0.050,),
       )
     ];
   }
@@ -48,12 +59,14 @@ class CustomSearch extends SearchDelegate {
 
   @override
   Widget? buildLeading(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
     return IconButton(
       onPressed: () {
         _popupMenuKey.currentState?.mounted;
         close(context, null);
       },
-      icon: const Icon(Icons.arrow_back),
+      icon: Icon(Icons.arrow_back, size: screenWidth * 0.050),
     );
   }
 
@@ -68,9 +81,13 @@ class CustomSearch extends SearchDelegate {
   }
 
   Widget _buildSearchResults(String searchTerm) {
-
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+    final themeData = Theme.of(context);
+    final light = themeData.brightness == Brightness.light;
+    print(themeData.brightness == Brightness.light ? 'Light Mode' : 'Dark Mode');
     return Container(
-      color: background,
+      color: light ? lightBackgroundYellow : background,
       child: FutureBuilder<List<SearchResult>>(
         future: searchWord(searchTerm),
         builder: (context, snapshot) {
@@ -78,14 +95,14 @@ class CustomSearch extends SearchDelegate {
             return Center(
               child: Lottie.asset(
                 "assets/animation/loading.json",
-                width: 120,
+                width: screenWidth * 0.250,
               ),
             );
           } else if (snapshot.hasError) {
             return Center(
               child: Text(
                 'No result found',
-                style: GoogleFonts.poppins(fontSize: 18, color: white),
+                style: GoogleFonts.poppins(fontSize: screenWidth * 0.036, color: light ? black : white),
               ),
             );
           } else if (snapshot.hasData) {
@@ -95,8 +112,8 @@ class CustomSearch extends SearchDelegate {
               itemBuilder: (context, index) {
                 final result = searchResults[index];
                 return Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 15.0, vertical: 10.0),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: screenHeight * 0.015, vertical: screenHeight * 0.010),
                   child: GestureDetector(
                     onTap: () {
                       Navigator.of(context).push(
@@ -127,7 +144,7 @@ class CustomSearch extends SearchDelegate {
                       children: [
                         Text(
                           '${result.surah.englishName}, ${result.numberInSurah}',
-                          style: GoogleFonts.poppins(color: white, fontSize: 17),
+                          style: GoogleFonts.poppins(color: light ? black : white, fontSize: screenWidth * 0.034),
                         ),
                         RichText(
                           text: highlightSearchText(result.text, searchTerm),
@@ -143,7 +160,7 @@ class CustomSearch extends SearchDelegate {
           } else {
             return Center(
               child: Text('No results found',
-                  style: GoogleFonts.poppins(fontSize: 18, color: white)),
+                  style: GoogleFonts.poppins(fontSize: screenWidth * 0.036, color: light ? black : white)),
             );
           }
         },
@@ -176,10 +193,15 @@ class CustomSearch extends SearchDelegate {
   }
 
   InlineSpan highlightSearchText(String text, String searchTerm) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+    final themeData = Theme.of(context);
+    final light = themeData.brightness == Brightness.light;
+    print(themeData.brightness == Brightness.light ? 'Light Mode' : 'Dark Mode');
     if (searchTerm.isEmpty) {
       return TextSpan(
         text: text,
-        style: const TextStyle(fontSize: 14, color: Color(0xffFFFFFF)),
+        style: TextStyle(fontSize: screenWidth * 0.028, color: light ? black : const Color(0xffFFFFFF)),
       );
     }
 
@@ -188,28 +210,37 @@ class CustomSearch extends SearchDelegate {
     int previousEndIndex = 0;
 
     regex.allMatches(text).forEach((match) {
+      final themeData = Theme.of(context);
+      final light = themeData.brightness == Brightness.light;
+      double screenWidth = MediaQuery.of(context).size.width;
+      double screenHeight = MediaQuery.of(context).size.height;
       final int startIndex = match.start;
       final int endIndex = match.end;
 
       if (startIndex > previousEndIndex) {
         spans.add(TextSpan(
           text: text.substring(previousEndIndex, startIndex),
-          style: const TextStyle(fontSize: 15, color: Color(0xffFFFFFF)),
+          style: TextStyle(fontSize: screenWidth * 0.030, color: light ? black : const Color(0xffFFFFFF)),
         ));
       }
 
       spans.add(TextSpan(
         text: text.substring(startIndex, endIndex),
-        style: GoogleFonts.poppins(fontSize: 15, color: primary),
+        style: GoogleFonts.poppins(fontSize: screenWidth * 0.030, color: primary),
       ));
 
       previousEndIndex = endIndex;
     });
 
     if (previousEndIndex < text.length) {
+      final themeData = Theme.of(context);
+      final light = themeData.brightness == Brightness.light;
+      double screenWidth = MediaQuery.of(context).size.width;
+      double screenHeight = MediaQuery.of(context).size.height;
+
       spans.add(TextSpan(
         text: text.substring(previousEndIndex),
-        style: const TextStyle(fontSize: 15, color: Color(0xffFFFFFF)),
+        style: TextStyle(fontSize: screenWidth * 0.030, color: light ? black : const Color(0xffFFFFFF)),
       ));
     }
 

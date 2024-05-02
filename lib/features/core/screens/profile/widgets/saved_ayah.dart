@@ -22,26 +22,32 @@ class _SavedAyahPageState extends State<SavedAyahPage> {
   Widget build(BuildContext context) {
     final SavedAyahProvider savedAyahProvider = Provider.of<SavedAyahProvider>(context);
     final List<SavedAyah> savedAyahs = savedAyahProvider.savedAyahs;
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    final themeData = Theme.of(context);
+    final light = themeData.brightness == Brightness.light;
+    print(themeData.brightness == Brightness.light ? 'Light Mode' : 'Dark Mode');
 
     return Scaffold(
-      backgroundColor: background,
+      backgroundColor: light ? lightBackgroundYellow : background,
       appBar: AppBar(
-        backgroundColor: gray,
+        backgroundColor: light ? white : gray,
         automaticallyImplyLeading: false,
         elevation: 0,
         title: Row(children: [
           IconButton(
               onPressed: (() => Navigator.of(context).pop()),
-              icon: SvgPicture.asset('assets/svgs/back-icon.svg')),
-          const SizedBox(
-            width: 24,
+              icon: SvgPicture.asset('assets/svgs/back-icon.svg', width: screenWidth * 0.055, color: light ? Colors.black87 : text,)),
+          SizedBox(
+            width: screenHeight * 0.024,
           ),
           Text(
             'Saved Ayahs',
             style: GoogleFonts.poppins(
-                fontSize: 20,
+                fontSize: screenWidth * 0.040,
                 fontWeight: FontWeight.bold,
-                color: white.withOpacity(0.8)),
+                color: light ? black : white.withOpacity(0.8)),
           ),
         ]),
       ),
@@ -50,12 +56,13 @@ class _SavedAyahPageState extends State<SavedAyahPage> {
         itemBuilder: (context, index) {
           final savedAyah = savedAyahs[index];
           return Padding(
-            padding: index == 0 ? const EdgeInsets.only(top: 8.0) : EdgeInsets.zero,
+            padding: index == 0 ? EdgeInsets.only(top: screenHeight * 0.008) : EdgeInsets.zero,
             child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              margin: EdgeInsets.symmetric(horizontal: screenHeight * 0.010, vertical: screenHeight * 0.005),
               decoration: BoxDecoration(
                 borderRadius: const BorderRadius.all(Radius.circular(5)),
-                color: gray
+                color: light ? white : gray,
+                border: Border.all(color: text, width: 0.11)
               ),
               child: InkWell(
                 onTap: (){
@@ -83,7 +90,7 @@ class _SavedAyahPageState extends State<SavedAyahPage> {
                   );
                 },
                 child: ListTile(
-                  title: Text(savedAyah.surahName),
+                  title: Text(savedAyah.surahName, style: TextStyle(fontSize: screenWidth * 0.040),),
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -91,6 +98,7 @@ class _SavedAyahPageState extends State<SavedAyahPage> {
                         '${savedAyah.ayahNumber.split(':').first}. ${savedAyah.ayahTranslatedText}',
                         maxLines: 3,
                         overflow: TextOverflow.clip,
+                        style: TextStyle(fontSize: screenWidth * 0.035),
                       ),
                       // Text('Surah Number: ${savedAyah.surahNumber}'),
                       // Text('Ayah Translated Text: ${savedAyah.ayahTranslatedText}'),
@@ -101,7 +109,7 @@ class _SavedAyahPageState extends State<SavedAyahPage> {
                       Provider.of<SavedAyahProvider>(context, listen: false)
                           .removeAyahByIndex(index);
                     });
-                  },child: const Icon(Icons.delete)),
+                  },child: Icon(Icons.delete, size: screenWidth * 0.050,)),
                 ),
               ),
             ),

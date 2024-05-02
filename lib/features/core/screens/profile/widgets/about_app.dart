@@ -46,28 +46,36 @@ class _AboutAppState extends State<AboutApp> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    final themeData = Theme.of(context);
+    final light = themeData.brightness == Brightness.light;
+    print(themeData.brightness == Brightness.light ? 'Light Mode' : 'Dark Mode');
+
     return Scaffold(
-      backgroundColor: background,
+      backgroundColor: light ? lightBackgroundYellow : background,
       appBar: AppBar(
-        backgroundColor: gray,
+        backgroundColor: light ? white : gray,
         automaticallyImplyLeading: false,
-        elevation: 10,
+        elevation: 0,
         title: Row(children: [
           IconButton(
               onPressed: (() => Navigator.of(context).pop()),
               icon: SvgPicture.asset(
                 'assets/svgs/back-icon.svg',
-                color: white.withOpacity(0.8),
+                width: screenWidth * 0.055,
+                color: light ? Colors.black87 : white.withOpacity(0.8),
               )),
-          const SizedBox(
-            width: 24,
+          SizedBox(
+            width: screenHeight * 0.024,
           ),
           Text(
             'About App',
             style: GoogleFonts.poppins(
-                fontSize: 22,
+                fontSize: screenWidth * 0.044,
                 fontWeight: FontWeight.bold,
-                color: white.withOpacity(0.8)),
+                color: light ? black : white.withOpacity(0.8)),
           ),
         ]),
       ),
@@ -78,17 +86,18 @@ class _AboutAppState extends State<AboutApp> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 15,),
-              Text("Welcome to the bilol_tech Daily Quran app, your comprehensive guide to reading and understanding the Holy Quran."),
-              const SizedBox(height: 15,),
-              Text("With our app, you can easily access Surahs, Parahs, Sajda Ayahs, and even save your favorite verses for later reference."),
-              const SizedBox(height: 15,),
-              Text("Our user-friendly interface makes it simple to navigate through the Quran, whether you're searching for specific verses or exploring the teachings of Islam."),
-              const SizedBox(height: 15,),
-              Text("Stay connected with prayer times and enrich your spiritual journey with our carefully curated content."),
-              const SizedBox(height: 15,),
-              Text("Share and Support bilol_tech Daily Quran app."),
+              Text("Welcome to the bilol_tech Daily Quran app, your comprehensive guide to reading and understanding the Holy Quran.", style: TextStyle(fontSize: screenWidth * 0.036),),
+              SizedBox(height: screenHeight * 0.015,),
+              Text("With our app, you can easily access Surahs, Parahs, Sajda Ayahs, and even save your favorite verses for later reference.", style: TextStyle(fontSize: screenWidth * 0.036),),
+              SizedBox(height: screenHeight * 0.015,),
+              Text("Our user-friendly interface makes it simple to navigate through the Quran, whether you're searching for specific verses or exploring the teachings of Islam.", style: TextStyle(fontSize: screenWidth * 0.036),),
+              SizedBox(height: screenHeight * 0.015,),
+              Text("Stay connected with prayer times and enrich your spiritual journey with our carefully curated content.", style: TextStyle(fontSize: screenWidth * 0.036),),
+              SizedBox(height: screenHeight * 0.015,),
+              Text("Share and Support bilol_tech Daily Quran app.", style: TextStyle(fontSize: screenWidth * 0.036),),
               const Spacer(),
-              Center(child: Text("Version: $_appVersion")),
+              Center(child: Text("Version: $_appVersion", style: TextStyle(fontSize: screenWidth * 0.036),)),
+              SizedBox(height: screenHeight * 0.020,)
             ],
           ),
         ),

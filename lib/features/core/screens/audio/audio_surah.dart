@@ -47,28 +47,35 @@ class _AudioSurahState extends State<AudioSurah> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    final themeData = Theme.of(context);
+    final light = themeData.brightness == Brightness.light;
+    print(themeData.brightness == Brightness.light ? 'Light Mode' : 'Dark Mode');
+
     return Scaffold(
-      backgroundColor: background,
+      backgroundColor: light ? lightBackgroundYellow : background,
       appBar: AppBar(
-        backgroundColor: gray,
+        backgroundColor: light ? lightBackgroundWhite : gray,
         automaticallyImplyLeading: false,
         elevation: 0,
         centerTitle: false,
         title: Padding(
-          padding: const EdgeInsets.only(left: 10.0),
+          padding: EdgeInsets.only(left: screenHeight * 0.010),
           child: Text(
             'Audio',
             style: GoogleFonts.poppins(
-                fontSize: 22,
+                fontSize: screenWidth * 0.055,
                 fontWeight: FontWeight.bold,
-                color: white.withOpacity(0.8)),
+                color: light ? black : white.withOpacity(0.8)),
           ),
         ),
         actions: [
           Padding(
-            padding: const EdgeInsets.only(right: 10.0),
+            padding: EdgeInsets.only(right: screenHeight * 0.010),
             child: IconButton(
-              icon: SvgPicture.asset('assets/svgs/search-icon.svg'),
+              icon: SvgPicture.asset('assets/svgs/search-icon.svg', width: screenWidth * 0.055, color: light ? Colors.black87 : text),
               onPressed: () {
                 showSearch(
                   context: context,
@@ -82,10 +89,10 @@ class _AudioSurahState extends State<AudioSurah> {
       body: SafeArea(
         child: user != null
             ? Padding(
-                padding: const EdgeInsets.only(left: 22, right: 22),
+                padding: EdgeInsets.only(left: screenWidth * 0.035, right: screenWidth * 0.035),
                 child: surahs.isEmpty
                     ? Center(
-                        child: Lottie.asset("assets/animation/loading.json", width: 120)
+                    child: Lottie.asset("assets/animation/loading.json", width: screenWidth * 0.250)
                 )
                     : ListView.separated(
                         itemCount: surahs.length,
@@ -120,28 +127,25 @@ class _AudioSurahState extends State<AudioSurah> {
                               );
                             },
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 16),
+                              padding: EdgeInsets.symmetric(vertical: screenWidth * 0.025),
                               child: Row(
                                 children: [
                                   Stack(
+                                    alignment: Alignment.center,
                                     children: [
                                       SvgPicture.asset(
-                                          'assets/svgs/nomor-surah.svg'),
-                                      SizedBox(
-                                        height: 36,
-                                        width: 36,
-                                        child: Center(
-                                            child: Text(
-                                          "${surah.number}",
-                                          style: GoogleFonts.poppins(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w500),
-                                        )),
+                                          'assets/svgs/nomor-surah.svg', width: screenWidth * 0.080,),
+                                      Text(
+                                        "${surah.number}",
+                                        style: GoogleFonts.poppins(
+                                        color: light ? black : white,
+                                        fontSize: screenWidth * 0.03,
+                                        fontWeight: FontWeight.w500),
                                       )
                                     ],
                                   ),
-                                  const SizedBox(
-                                    width: 16,
+                                  SizedBox(
+                                    width: screenWidth * 0.040,
                                   ),
                                   Expanded(
                                       child: Column(
@@ -151,12 +155,13 @@ class _AudioSurahState extends State<AudioSurah> {
                                       Text(
                                         surah.englishName,
                                         style: GoogleFonts.poppins(
-                                            color: Colors.white,
+                                            color: light ? black : white,
                                             fontWeight: FontWeight.w500,
-                                            fontSize: 16),
+                                            fontSize: screenWidth * 0.04
+                                        ),
                                       ),
-                                      const SizedBox(
-                                        height: 4,
+                                      SizedBox(
+                                        height: screenHeight * 0.004,
                                       ),
                                       Row(
                                         children: [
@@ -165,28 +170,30 @@ class _AudioSurahState extends State<AudioSurah> {
                                             style: GoogleFonts.poppins(
                                                 color: text,
                                                 fontWeight: FontWeight.w500,
-                                                fontSize: 12),
+                                                fontSize: screenWidth * 0.03
+                                            ),
                                           ),
-                                          const SizedBox(
-                                            width: 5,
+                                          SizedBox(
+                                            width: screenWidth * 0.015,
                                           ),
                                           Container(
-                                            width: 4,
-                                            height: 4,
+                                            width: screenWidth * 0.010,
+                                            height: screenHeight * 0.005,
                                             decoration: BoxDecoration(
                                                 borderRadius:
                                                     BorderRadius.circular(2),
                                                 color: text),
                                           ),
-                                          const SizedBox(
-                                            width: 5,
+                                          SizedBox(
+                                            width: screenWidth * 0.015,
                                           ),
                                           Text(
                                             "${surah.numberOfAyahs} Ayat",
                                             style: GoogleFonts.poppins(
                                                 color: text,
                                                 fontWeight: FontWeight.w500,
-                                                fontSize: 12),
+                                                fontSize: screenWidth * 0.031
+                                            ),
                                           ),
                                         ],
                                       )
@@ -196,7 +203,7 @@ class _AudioSurahState extends State<AudioSurah> {
                                     surah.name.split(' ').skip(1).join(' '),
                                     style: GoogleFonts.amiri(
                                         color: primary,
-                                        fontSize: 20,
+                                        fontSize: screenWidth * 0.042,
                                         fontWeight: FontWeight.bold),
                                   ),
                                 ],
@@ -207,20 +214,20 @@ class _AudioSurahState extends State<AudioSurah> {
                       ),
               )
             : Padding(
-                padding: const EdgeInsets.only(left: 22, right: 22),
+                padding: EdgeInsets.only(left: screenHeight * 0.022, right: screenHeight * 0.0022),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Center(
                       child: SizedBox(
-                        width: 200,
+                        width: screenWidth * 0.500,
                           child: Text(
                         "To access the music, signing in or signing up for the application is required.",
                         textAlign: TextAlign.center,
-                        style: TextStyle(color: white),
+                        style: TextStyle(color: light ? black : white, fontSize: screenWidth * 0.035),
                       )),
                     ),
-                    const SizedBox(height: 25,),
+                    SizedBox(height: screenHeight * 0.027,),
                     GestureDetector(
                       onTap: () {
                         Navigator.of(context).push(
@@ -240,9 +247,9 @@ class _AudioSurahState extends State<AudioSurah> {
                         );
                       },
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 45.0),
+                        padding: EdgeInsets.symmetric(horizontal: screenHeight * 0.045),
                         child: Container(
-                          height: 40,
+                          height: screenHeight * 0.045,
                           decoration: BoxDecoration(
                               borderRadius:
                               const BorderRadius.all(Radius.circular(3)),
@@ -250,7 +257,7 @@ class _AudioSurahState extends State<AudioSurah> {
                           child: Center(
                               child: Text(
                                 "Sign in or register to access",
-                                style: TextStyle(color: white, fontSize: 12),
+                                style: TextStyle(color: white, fontSize: screenWidth * 0.027),
                               )),
                         ),
                       ),

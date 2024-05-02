@@ -243,10 +243,15 @@ class _AudioSurahDetailsState extends State<AudioSurahDetails> {
   }
 
   Widget _buildBottomSheet() {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+    final themeData = Theme.of(context);
+    final light = themeData.brightness == Brightness.light;
+    print(themeData.brightness == Brightness.light ? 'Light Mode' : 'Dark Mode');
     return Visibility(
       visible: isOpened,
       child: Container(
-        height: MediaQuery.of(context).size.height * 0.150,
+        height: screenHeight * 0.150,
         decoration: BoxDecoration(
           color: selectedColor,
           border: Border(
@@ -259,9 +264,9 @@ class _AudioSurahDetailsState extends State<AudioSurahDetails> {
             ),
           ),
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: EdgeInsets.symmetric(horizontal: screenHeight * 0.016),
         child: Container(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
           color: selectedColor,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -277,13 +282,14 @@ class _AudioSurahDetailsState extends State<AudioSurahDetails> {
                       setState(() {});
                     },
                     timeLabelTextStyle: TextStyle(
+                        fontSize: screenHeight * 0.017,
                         color: selectedColor == mode_3
                             ? Colors.white
                             : Colors.black),
-                    timeLabelPadding: 8,
-                    barHeight: 3,
-                    thumbRadius: 4,
-                    thumbGlowRadius: 10,
+                    timeLabelPadding: screenHeight * 0.007,
+                    barHeight: screenHeight * 0.002,
+                    thumbRadius: screenHeight * 0.003,
+                    thumbGlowRadius: screenHeight * 0.009,
                     bufferedBarColor: Colors.red,
                   );
                 },
@@ -303,7 +309,7 @@ class _AudioSurahDetailsState extends State<AudioSurahDetails> {
                     },
                     icon: Icon(
                       Icons.loop,
-                      size: 20,
+                      size: screenWidth * 0.040,
                       color: audioPlayer.releaseMode == ReleaseMode.loop
                           ? primary
                           : selectedColor == mode_3
@@ -315,43 +321,43 @@ class _AudioSurahDetailsState extends State<AudioSurahDetails> {
                       onPressed: () {
                         showModalBottomSheet(
                           context: context,
-                          backgroundColor: gray,
+                          backgroundColor: light ? white : gray,
                           builder: (BuildContext context) {
                             return Container(
-                              height: MediaQuery.of(context).size.height * 0.26,
-                              color: gray,
+                              height: screenHeight * 0.26,
+                              color: light ? white : gray,
                               child: Column(
                                 children: [
-                                  const Padding(
+                                  Padding(
                                     padding:
-                                        EdgeInsets.only(left: 12.0, top: 12),
+                                        EdgeInsets.only(left: screenHeight * 0.012, top: screenHeight * 0.012),
                                     child: Row(
                                       children: [
                                         Icon(
                                           Icons.settings,
-                                          size: 20,
-                                          color: Colors.white,
+                                          size: screenWidth * 0.040,
+                                          color: light ? Colors.black87 : white,
                                         ),
                                         SizedBox(
-                                          width: 8,
+                                          width: screenHeight * 0.008,
                                         ),
                                         Text(
                                           "Audio settings",
-                                          style: TextStyle(color: Colors.white),
+                                          style: TextStyle(color: light ? black : white, fontSize: screenWidth * 0.040),
                                         ),
                                       ],
                                     ),
                                   ),
-                                  const SizedBox(
-                                    height: 4,
+                                  SizedBox(
+                                    height: screenHeight * 0.004,
                                   ),
                                   Divider(
                                     color: Colors.grey.withOpacity(0.6),
                                     thickness: 0.3,
                                   ),
                                   Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 12.0, top: 12),
+                                    padding: EdgeInsets.only(
+                                        left: screenHeight * 0.012, top: screenHeight * 0.012),
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceAround,
@@ -360,25 +366,22 @@ class _AudioSurahDetailsState extends State<AudioSurahDetails> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            const Text(
+                                            Text(
                                               "Start",
                                               style: TextStyle(
-                                                  color: Colors.white),
+                                                  color: light ? black : white, fontSize: screenWidth * 0.040),
                                             ),
-                                            const SizedBox(
-                                              height: 5,
+                                            SizedBox(
+                                              height: screenHeight * 0.005,
                                             ),
                                             Container(
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.38,
-                                              height: 36,
+                                              width: screenWidth * 0.36,
+                                              height: screenHeight * 0.044,
                                               decoration: BoxDecoration(
                                                 borderRadius:
                                                     const BorderRadius.all(
                                                         Radius.circular(6)),
-                                                color: modalSheetColor,
+                                                color: light ? const Color(0xffEFEFEF) : modalSheetColor,
                                               ),
                                               child: StatefulBuilder(
                                                 builder: (BuildContext context,
@@ -402,13 +405,13 @@ class _AudioSurahDetailsState extends State<AudioSurahDetails> {
                                                     underline: Container(),
                                                     alignment:
                                                         Alignment.centerLeft,
-                                                    dropdownColor: background,
-                                                    icon: const Padding(
+                                                    dropdownColor: light ? white : background,
+                                                    icon: Padding(
                                                       padding: EdgeInsets.only(
-                                                          left: 80.0),
+                                                          left: screenWidth * 0.200),
                                                       child: Icon(
-                                                          Icons.arrow_drop_down,
-                                                          color: Colors.white),
+                                                          Icons.arrow_drop_down, size: screenWidth * 0.060,
+                                                          color: light ? black : white),
                                                     ),
                                                     items: List.generate(
                                                       numberOfAyahs,
@@ -417,16 +420,14 @@ class _AudioSurahDetailsState extends State<AudioSurahDetails> {
                                                         value: index,
                                                         child: Padding(
                                                           padding:
-                                                              const EdgeInsets
+                                                              EdgeInsets
                                                                       .only(
-                                                                  left: 10.0),
+                                                                  left: screenHeight * 0.010),
                                                           child: Text(
                                                               '${index + 1}',
-                                                              style: const TextStyle(
-                                                                  color: Colors
-                                                                      .white,
-                                                                  fontSize:
-                                                                      14)),
+                                                              style: TextStyle(
+                                                                  color: light ? black : white,
+                                                                  fontSize: screenWidth * 0.028)),
                                                         ),
                                                       ),
                                                     ),
@@ -443,25 +444,22 @@ class _AudioSurahDetailsState extends State<AudioSurahDetails> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            const Text(
+                                            Text(
                                               "End",
                                               style: TextStyle(
-                                                  color: Colors.white),
+                                                  color: light ? black : white, fontSize: screenWidth * 0.040),
                                             ),
-                                            const SizedBox(
-                                              height: 5,
+                                            SizedBox(
+                                              height: screenHeight * 0.005,
                                             ),
                                             Container(
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.38,
-                                              height: 36,
+                                              width: screenWidth * 0.36,
+                                              height: screenHeight * 0.044,
                                               decoration: BoxDecoration(
                                                 borderRadius:
                                                     const BorderRadius.all(
                                                         Radius.circular(6)),
-                                                color: modalSheetColor,
+                                                color: light ? const Color(0xffEFEFEF) : modalSheetColor,
                                               ),
                                               child: StatefulBuilder(
                                                 builder: (BuildContext context,
@@ -484,13 +482,14 @@ class _AudioSurahDetailsState extends State<AudioSurahDetails> {
                                                     underline: Container(),
                                                     alignment:
                                                         Alignment.centerLeft,
-                                                    dropdownColor: background,
-                                                    icon: const Padding(
+                                                    dropdownColor: light ? white : background,
+                                                    icon: Padding(
                                                       padding: EdgeInsets.only(
-                                                          left: 80.0),
+                                                          left: screenWidth * 0.200),
                                                       child: Icon(
                                                           Icons.arrow_drop_down,
-                                                          color: Colors.white),
+                                                          size: screenWidth * 0.060,
+                                                          color: light ? black : white),
                                                     ),
                                                     items: List.generate(
                                                       numberOfAyahs -
@@ -502,16 +501,14 @@ class _AudioSurahDetailsState extends State<AudioSurahDetails> {
                                                                 index,
                                                         child: Padding(
                                                           padding:
-                                                              const EdgeInsets
+                                                               EdgeInsets
                                                                       .only(
-                                                                  left: 10.0),
+                                                                  left: screenHeight * 0.010),
                                                           child: Text(
                                                               '${selectedStartNumber + (index + 1)}',
-                                                              style: const TextStyle(
-                                                                  color: Colors
-                                                                      .white,
-                                                                  fontSize:
-                                                                      14)),
+                                                              style: TextStyle(
+                                                                  color: light ? black : white,
+                                                                  fontSize: screenWidth * 0.028)),
                                                         ),
                                                       ),
                                                     ),
@@ -527,14 +524,14 @@ class _AudioSurahDetailsState extends State<AudioSurahDetails> {
                                       ],
                                     ),
                                   ),
-                                  const SizedBox(
-                                    height: 15,
+                                  SizedBox(
+                                    height: screenHeight * 0.015,
                                   ),
                                   Padding(
-                                    padding: const EdgeInsets.only(right: 21.0),
+                                    padding: EdgeInsets.only(right: screenHeight * 0.021),
                                     child: Row(
                                       crossAxisAlignment:
-                                          CrossAxisAlignment.end,
+                                          CrossAxisAlignment.center,
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
                                         InkWell(
@@ -546,8 +543,8 @@ class _AudioSurahDetailsState extends State<AudioSurahDetails> {
                                             Navigator.pop(context);
                                           },
                                           child: Container(
-                                            width: 90,
-                                            height: 28,
+                                            width: screenHeight * 0.090,
+                                            height: screenWidth * 0.028,
                                             decoration: const BoxDecoration(
                                               borderRadius: BorderRadius.all(
                                                   Radius.circular(6)),
@@ -555,9 +552,9 @@ class _AudioSurahDetailsState extends State<AudioSurahDetails> {
                                             child: Center(
                                                 child: Text(
                                               "cancel".toUpperCase(),
-                                              style: const TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 12),
+                                              style: TextStyle(
+                                                  color: light ? black : white,
+                                                  fontSize: screenWidth * 0.024),
                                             )),
                                           ),
                                         ),
@@ -584,8 +581,8 @@ class _AudioSurahDetailsState extends State<AudioSurahDetails> {
                                             Navigator.pop(context);
                                           },
                                           child: Container(
-                                            width: 90,
-                                            height: 28,
+                                            width: screenHeight * 0.090,
+                                            height: screenHeight * 0.028,
                                             decoration: const BoxDecoration(
                                                 borderRadius: BorderRadius.all(
                                                     Radius.circular(6)),
@@ -593,9 +590,9 @@ class _AudioSurahDetailsState extends State<AudioSurahDetails> {
                                             child: Center(
                                                 child: Text(
                                               "save".toUpperCase(),
-                                              style: const TextStyle(
+                                              style: TextStyle(
                                                   color: Colors.white,
-                                                  fontSize: 12),
+                                                  fontSize: screenWidth * 0.024),
                                             )),
                                           ),
                                         ),
@@ -610,7 +607,7 @@ class _AudioSurahDetailsState extends State<AudioSurahDetails> {
                       },
                       icon: Icon(
                         Icons.settings,
-                        size: 20,
+                        size: screenWidth * 0.040,
                         color: selectedColor == mode_3
                             ? Colors.white
                             : Colors.black,
@@ -625,7 +622,7 @@ class _AudioSurahDetailsState extends State<AudioSurahDetails> {
                     },
                     icon: Icon(
                       Icons.skip_previous,
-                      size: 20,
+                      size: screenWidth * 0.040,
                       color:
                           selectedColor == mode_3 ? Colors.white : Colors.black,
                     ),
@@ -648,13 +645,13 @@ class _AudioSurahDetailsState extends State<AudioSurahDetails> {
                         if (playerState == PlayerState.playing) {
                           return Icon(
                             Icons.pause,
-                            size: 20,
+                            size: screenWidth * 0.040,
                             color: primary,
                           );
                         } else {
                           return Icon(
                             Icons.play_arrow,
-                            size: 20,
+                            size: screenWidth * 0.040,
                             color: selectedColor == mode_3
                                 ? Colors.white
                                 : Colors.black,
@@ -674,7 +671,7 @@ class _AudioSurahDetailsState extends State<AudioSurahDetails> {
                     },
                     icon: Icon(
                       Icons.skip_next,
-                      size: 20,
+                      size: screenWidth * 0.040,
                       color:
                           selectedColor == mode_3 ? Colors.white : Colors.black,
                     ),
@@ -688,7 +685,7 @@ class _AudioSurahDetailsState extends State<AudioSurahDetails> {
                     },
                     icon: Icon(
                       Icons.close_rounded,
-                      size: 20,
+                      size: screenWidth * 0.040,
                       color:
                           selectedColor == mode_3 ? Colors.white : Colors.black,
                     ),
@@ -704,6 +701,8 @@ class _AudioSurahDetailsState extends State<AudioSurahDetails> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
     selectedColor = Provider.of<ColorModel>(context).selectedColor;
     final latinTextSizeProvider = Provider.of<LatinTextSizeProvider>(context);
     final arabicTextSizeProvider = Provider.of<ArabicTextSizeProvider>(context);
@@ -720,17 +719,18 @@ class _AudioSurahDetailsState extends State<AudioSurahDetails> {
                   onPressed: (() => Navigator.of(context).pop()),
                   icon: SvgPicture.asset(
                     'assets/svgs/back-icon.svg',
+                    width: screenWidth* 0.055,
                     color: selectedColor == mode_3
                         ? white.withOpacity(0.8)
                         : Colors.black54,
                   )),
-              const SizedBox(
-                width: 24,
+              SizedBox(
+                width: screenWidth * 0.045,
               ),
               Text(
                 widget.surahName,
                 style: GoogleFonts.poppins(
-                  fontSize: 20,
+                  fontSize: screenWidth * 0.05,
                   fontWeight: FontWeight.bold,
                   color: selectedColor == mode_3
                       ? white.withOpacity(0.8)
@@ -748,13 +748,12 @@ class _AudioSurahDetailsState extends State<AudioSurahDetails> {
               ? const NoInternetPage()
               : surahDetails == null || ayahs == null
                   ? Center(
-                      child: Lottie.asset("assets/animation/loading.json",
-                          width: 120))
+          child: Lottie.asset("assets/animation/loading.json", width: screenWidth * 0.250))
                   : Stack(
                       children: [
                         Padding(
-                          padding: const EdgeInsets.only(
-                              left: 24, right: 24, bottom: 15),
+                          padding: EdgeInsets.only(
+                              left: screenHeight * 0.024, right: screenHeight * 0.024, bottom: screenHeight * 0.015),
                           child: ScrollablePositionedList.separated(
                             itemScrollController: itemScrollController,
                             itemBuilder: (context, index) {
@@ -769,7 +768,7 @@ class _AudioSurahDetailsState extends State<AudioSurahDetails> {
                               final ayahAudio = ayahs[index];
                               return Padding(
                                 padding:
-                                    const EdgeInsets.only(top: 10, bottom: 14),
+                                    EdgeInsets.only(top: screenHeight * 0.010, bottom: screenHeight * 0.014),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -807,7 +806,7 @@ class _AudioSurahDetailsState extends State<AudioSurahDetails> {
                                                 ayahAudio['audio'], index);
                                           },
                                           child: Container(
-                                            width: 90,
+                                            padding: EdgeInsets.only(right: screenHeight * 0.010),
                                             decoration: BoxDecoration(
                                               color: index == playingIndex
                                                   ? primary
@@ -825,14 +824,14 @@ class _AudioSurahDetailsState extends State<AudioSurahDetails> {
                                             ),
                                             child: Padding(
                                               padding:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 5.0),
+                                                   EdgeInsets.symmetric(
+                                                      vertical: screenHeight * 0.005),
                                               child: Row(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment.start,
                                                 children: [
-                                                  const SizedBox(
-                                                    width: 8,
+                                                  SizedBox(
+                                                    width: screenHeight * 0.008,
                                                   ),
                                                   Icon(
                                                     index == playingIndex
@@ -844,14 +843,15 @@ class _AudioSurahDetailsState extends State<AudioSurahDetails> {
                                                                 mode_3
                                                             ? white
                                                             : Colors.black54,
-                                                    size: 18,
+                                                    size: screenHeight * 0.018,
                                                   ),
-                                                  const SizedBox(
-                                                    width: 6,
+                                                  SizedBox(
+                                                    width: screenHeight * 0.006,
                                                   ),
                                                   Text(
                                                     "Listen",
                                                     style: TextStyle(
+                                                      fontSize: screenHeight * 0.018,
                                                       color: index ==
                                                               playingIndex
                                                           ? white
@@ -884,8 +884,8 @@ class _AudioSurahDetailsState extends State<AudioSurahDetails> {
                                                   const BorderRadius.all(
                                                       Radius.circular(3))),
                                           child: Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 4, vertical: 1),
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: screenHeight * 0.004, vertical: screenHeight * 0.001),
                                             child: Text(
                                               "${ayah['numberInSurah']}:${surahDetails!['numberOfAyahs']}",
                                               style: TextStyle(
@@ -934,6 +934,7 @@ class _AudioSurahDetailsState extends State<AudioSurahDetails> {
                         child: Icon(
                       Icons.swipe_up,
                       color: white,
+                      size: screenHeight * 0.025,
                     )),
                   ),
                 ),

@@ -19,43 +19,49 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     final latinTextSizeProvider = Provider.of<LatinTextSizeProvider>(context);
     final arabicTextSizeProvider = Provider.of<ArabicTextSizeProvider>(context);
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+    final themeData = Theme.of(context);
+    final light = themeData.brightness == Brightness.light;
+    print(themeData.brightness == Brightness.light ? 'Light Mode' : 'Dark Mode');
     return Scaffold(
-      backgroundColor: background,
+      backgroundColor: light ? lightBackgroundYellow : background,
       appBar: AppBar(
-        backgroundColor: gray,
+        backgroundColor: light ? white : gray,
         automaticallyImplyLeading: false,
         elevation: 0,
         title: Row(children: [
           IconButton(
               onPressed: (() => Navigator.of(context).pop()),
-              icon: SvgPicture.asset('assets/svgs/back-icon.svg')),
-          const SizedBox(
-            width: 24,
+              icon: SvgPicture.asset('assets/svgs/back-icon.svg', width: screenWidth * 0.055, color: light ? Colors.black87 : text,)),
+          SizedBox(
+            width: screenHeight * 0.024,
           ),
           Text(
             'Settings',
             style: GoogleFonts.poppins(
-                fontSize: 20,
+                fontSize: screenWidth * 0.044,
                 fontWeight: FontWeight.bold,
-                color: white.withOpacity(0.8)),
+                color: light ? black : white.withOpacity(0.8)),
           ),
         ]),
       ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 15),
+          padding: EdgeInsets.symmetric(horizontal: screenHeight * 0.010, vertical: screenHeight * 0.015),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Text size', style: TextStyle(fontSize: 10, color: white.withOpacity(0.7)),),
-              const SizedBox(height: 3,),
+              Text('Text size', style: TextStyle(fontSize: screenWidth * 0.026, color: light ? black : white.withOpacity(0.7)),),
+              SizedBox(height: screenHeight * 0.006,),
               Container(
                 decoration: BoxDecoration(
                   borderRadius: const BorderRadius.all(Radius.circular(5)),
-                  color: gray,
+                  color: light ? white : gray,
+                  border: Border.all(color: text, width: 0.11)
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+                  padding: EdgeInsets.symmetric(horizontal: screenHeight * 0.012, vertical: screenHeight * 0.007),
                   child: Column(
                     children: [
                       InkWell(
@@ -65,7 +71,7 @@ class _SettingsPageState extends State<SettingsPage> {
                               shape: const RoundedRectangleBorder(
                                 borderRadius: BorderRadius.zero
                               ),
-                              backgroundColor: gray, // Background color
+                              backgroundColor: light ? white : gray, // Background color
                               elevation: 0, // No elevation
                               child: Padding(
                                 padding: const EdgeInsets.all(15),
@@ -75,23 +81,22 @@ class _SettingsPageState extends State<SettingsPage> {
                                   children: [
                                     Text(
                                       "Adjust Value",
-                                      style: TextStyle(fontSize: 13, color: white),
+                                      style: TextStyle(fontSize: screenWidth * 0.026, color: light ? black : white),
                                     ),
-                                  const SizedBox(height: 10,),
+                                    SizedBox(height: screenHeight * 0.010,),
                                   StatefulBuilder(
                                     builder: (BuildContext context, void Function(void Function()) setState) {
                                       return SliderTheme(
                                         data: SliderTheme.of(context).copyWith(
-                                          trackHeight: 3.0,
+                                          trackHeight: screenWidth * 0.006,
                                           activeTickMarkColor: primary,
                                           inactiveTickMarkColor: primary,
                                           thumbShape:
-                                          const RoundSliderThumbShape(enabledThumbRadius: 8.0),
-                                          overlayShape:
-                                          const RoundSliderOverlayShape(overlayRadius: 12.0),
+                                          RoundSliderThumbShape(enabledThumbRadius: screenWidth * 0.016),
+                                          overlayShape: RoundSliderOverlayShape(overlayRadius: screenWidth * 0.024),
                                         ),
                                         child: Slider(
-                                          min: 16,
+                                          min: 10,
                                           value: latinTextSizeProvider.currentLatinTextSize,
                                           max: 40,
                                           divisions: 10,
@@ -107,7 +112,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                       );
                                     },
                                   ),
-                                    const SizedBox(height: 10),
+                                    SizedBox(height: screenHeight * 0.010),
                                   ],
                                 ),
                               ),
@@ -116,9 +121,9 @@ class _SettingsPageState extends State<SettingsPage> {
                         },
                         child: Row(
                           children: [
-                            Text("Latin", style: TextStyle(color: white, fontSize: 13),),
+                            Text("Latin", style: TextStyle(color: light ? black : white, fontSize: screenWidth * 0.026),),
                             const Spacer(),
-                            Text(latinTextSizeProvider.currentLatinTextSize.round().toString(), style: TextStyle(color: primary, fontSize: 14, fontStyle: FontStyle.italic),),
+                            Text(latinTextSizeProvider.currentLatinTextSize.round().toString(), style: TextStyle(color: primary, fontSize: screenWidth * 0.028, fontStyle: FontStyle.italic),),
                           ],
                         ),
                       ),
@@ -130,7 +135,7 @@ class _SettingsPageState extends State<SettingsPage> {
                               shape: const RoundedRectangleBorder(
                                   borderRadius: BorderRadius.zero
                               ),
-                              backgroundColor: gray, // Background color
+                              backgroundColor: light ? white : gray, // Background color
                               elevation: 0, // No elevation
                               child: Padding(
                                 padding: const EdgeInsets.all(15),
@@ -140,23 +145,21 @@ class _SettingsPageState extends State<SettingsPage> {
                                   children: [
                                     Text(
                                       "Adjust Value",
-                                      style: TextStyle(fontSize: 13, color: white),
+                                      style: TextStyle(fontSize: screenWidth * 0.026, color: light ? black : white),
                                     ),
-                                    const SizedBox(height: 10,),
+                                    SizedBox(height: screenHeight * 0.010,),
                                     StatefulBuilder(
                                       builder: (BuildContext context, void Function(void Function()) setState) {
                                         return SliderTheme(
                                           data: SliderTheme.of(context).copyWith(
-                                            trackHeight: 3.0,
+                                            trackHeight: screenWidth * 0.006,
                                             activeTickMarkColor: primary,
                                             inactiveTickMarkColor: primary,
-                                            thumbShape:
-                                            const RoundSliderThumbShape(enabledThumbRadius: 8.0),
-                                            overlayShape:
-                                            const RoundSliderOverlayShape(overlayRadius: 12.0),
+                                            thumbShape: RoundSliderThumbShape(enabledThumbRadius: screenWidth * 0.016),
+                                            overlayShape: RoundSliderOverlayShape(overlayRadius: screenWidth * 0.024),
                                           ),
                                           child: Slider(
-                                            min: 16,
+                                            min: 10,
                                             value: arabicTextSizeProvider.currentArabicTextSize,
                                             max: 40,
                                             divisions: 10,
@@ -172,7 +175,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                         );
                                       },
                                     ),
-                                    const SizedBox(height: 10),
+                                    SizedBox(height: screenHeight * 0.010),
                                   ],
                                 ),
                               ),
@@ -181,9 +184,9 @@ class _SettingsPageState extends State<SettingsPage> {
                         },
                         child: Row(
                           children: [
-                            Text("Arabic", style: TextStyle(color: white, fontSize: 13),),
+                            Text("Arabic", style: TextStyle(color: light ? black : white, fontSize: screenWidth * 0.026),),
                             const Spacer(),
-                            Text(arabicTextSizeProvider.currentArabicTextSize.round().toString(), style: TextStyle(color: primary, fontSize: 14, fontStyle: FontStyle.italic),),
+                            Text(arabicTextSizeProvider.currentArabicTextSize.round().toString(), style: TextStyle(color: primary, fontSize: screenWidth * 0.028, fontStyle: FontStyle.italic),),
                           ],
                         ),
                       ),

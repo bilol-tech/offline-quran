@@ -69,6 +69,8 @@ class _ParaDetailsScreenState extends State<ParaDetailsScreen> {
     Color? selectedColor = Provider.of<ColorModel>(context).selectedColor;
     final latinTextSizeProvider = Provider.of<LatinTextSizeProvider>(context);
     final arabicTextSizeProvider = Provider.of<ArabicTextSizeProvider>(context);
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: selectedColor,
       appBar: AppBar(
@@ -83,14 +85,15 @@ class _ParaDetailsScreenState extends State<ParaDetailsScreen> {
                 color: selectedColor == mode_3
                     ? white.withOpacity(0.8)
                     : Colors.black54,
+                width: screenWidth* 0.055,
               )),
-          const SizedBox(
-            width: 24,
+          SizedBox(
+            width: screenWidth * 0.045,
           ),
           Text(
             "${widget.surahName}, ${widget.numberInSurah} ayah",
             style: GoogleFonts.poppins(
-              fontSize: 20,
+              fontSize: screenWidth * 0.05,
               fontWeight: FontWeight.bold,
               color: selectedColor == mode_3
                   ? white.withOpacity(0.8)
@@ -106,9 +109,9 @@ class _ParaDetailsScreenState extends State<ParaDetailsScreen> {
       ),
       body: paraDetailsAyahs.isEmpty || paraDetailsTranslatedAyahs.isEmpty
           ? Center(
-          child: Lottie.asset("assets/animation/loading.json", width: 120))
+          child: Lottie.asset("assets/animation/loading.json", width: screenWidth * 0.250))
           : Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24),
+        padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
         child: ListView.separated(
           itemCount: paraDetailsAyahs.length,
           separatorBuilder: (context, index) =>
@@ -121,19 +124,19 @@ class _ParaDetailsScreenState extends State<ParaDetailsScreen> {
               children: [
                 if (index ==
                     0) // Add padding to the top of the first index
-                  const SizedBox(height: 10),
-                const SizedBox(
-                  height: 5,
+                  SizedBox(height: screenWidth * 0.030),
+                SizedBox(
+                  height: screenWidth * 0.025,
                 ),
                 Text(
                   paraAyah.surah.name.split(' ').skip(1).join(' '),
                   style: GoogleFonts.amiri(
                       color: primary,
-                      fontSize: 10,
+                      fontSize: screenWidth * 0.030,
                       fontWeight: FontWeight.bold),
                 ),
-                const SizedBox(
-                  height: 5,
+                SizedBox(
+                  height: screenWidth * 0.025,
                 ),
                 Align(
                   alignment: Alignment.centerRight,
@@ -196,8 +199,8 @@ class _ParaDetailsScreenState extends State<ParaDetailsScreen> {
                 //     ),
                 //   ],
                 // ),
-                const SizedBox(
-                  height: 5,
+                SizedBox(
+                  height: screenWidth * 0.025,
                 ),
               ],
             );

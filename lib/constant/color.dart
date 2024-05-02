@@ -16,3 +16,10 @@ Color dividorColor  = const Color(0xFF7B80AD).withOpacity(.35);
 Color mode_1 = const Color(0xffFFFFFF);
 Color mode_2 = const Color(0xffF0E8D1);
 Color mode_3 = const Color(0xFF040C23);
+
+Color black = const Color(0xff000000);
+
+
+// Light Mode colors
+Color lightBackgroundYellow = const Color(0xffFAFAEB);
+Color lightBackgroundWhite = const Color(0xffFFFFFF);
